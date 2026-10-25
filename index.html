@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>有機化学合成ラボ</title>
+  <title>有機化学合成ラボ（完全マスター版）</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -645,7 +645,7 @@
       </div>
       <div class="action-row" style="margin-top:2px;">
         <button class="btn btn-book" onclick="openBookModal()">
-          図鑑を開く (<span id="discoveredCount">6</span>/<span id="totalCompounds">61</span>)
+          図鑑を開く (<span id="discoveredCount">6</span>/<span id="totalCompounds">60</span>)
         </button>
       </div>
     </div>
@@ -686,7 +686,7 @@
         <button class="filter-btn" onclick="setBookFilter('aliphatic', this)">脂肪族</button>
       </div>
       <div class="book-stats">
-        <span>登録数: <b id="bookStatsDiscovered" style="color:var(--accent);">6</b> / <span id="bookStatsTotal">61</span></span>
+        <span>登録数: <b id="bookStatsDiscovered" style="color:var(--accent);">6</b> / <span id="bookStatsTotal">60</span></span>
         <span id="bookProgressPercent">10% 達成</span>
       </div>
       <div class="book-list" id="bookList"></div>
@@ -697,7 +697,7 @@
     </div>
   </div>
 
-  <!-- 目標ヒントモーダル（示性式と合成方法のみに厳選） -->
+  <!-- 目標ヒントモーダル -->
   <div class="modal-overlay" id="hintModal">
     <div class="modal-window">
       <div class="modal-header">
@@ -711,7 +711,7 @@
     </div>
   </div>
 
-  <!-- 実験台化合物 詳細解説モーダル（基本情報・生成方法・性質の3本柱） -->
+  <!-- 実験台化合物 詳細解説モーダル -->
   <div class="modal-overlay" id="detailModal">
     <div class="modal-window">
       <div class="modal-header">
@@ -742,7 +742,7 @@
 
   <script>
     /* ========================================================
-       1. SVGグラフィック定義
+       1. SVG描画
        ======================================================== */
     const SVG_CORE = `
       <polygon points="60,36 81,48 81,72 60,84 39,72 39,48" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
@@ -800,7 +800,11 @@
 
         case "propane":
           return `${base}
-            <text x="60" y="60" fill="#fff" font-size="9.5" font-weight="bold" text-anchor="middle" dominant-baseline="central">CH₃-CH₂-CH₃</text>
+            <text x="25" y="60" fill="#fff" font-size="8.5" font-weight="bold" dominant-baseline="central">CH₃</text>
+            <line x1="42" y1="60" x2="52" y2="60" stroke="#38bdf8" stroke-width="2"/>
+            <text x="60" y="60" fill="#fff" font-size="8.5" font-weight="bold" dominant-baseline="central">CH₂</text>
+            <line x1="72" y1="60" x2="82" y2="60" stroke="#38bdf8" stroke-width="2"/>
+            <text x="95" y="60" fill="#fff" font-size="8.5" font-weight="bold" dominant-baseline="central">CH₃</text>
           ${end}`;
 
         case "propylene":
@@ -1240,20 +1244,20 @@
           ${end}`;
 
         default:
-          return `${base}<text x="60" y="60" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">${type}</text>${end}`;
+          return `${base}${SVG_CORE}${end}`;
       }
     }
 
     /* ========================================================
-       2. 化合物データベース定義（全61種：propane追加修復済）
+       2. 化合物データベース定義（完全一意・全61種）
        ======================================================== */
     const COMPOUNDS = {
-      // --- 芳香族 ---
+      // --- 芳香族 (34種) ---
       benzene: {
         id: "benzene", name: "ベンゼン", formula: "C₆H₆", group: "aromatic",
         desc: "最も基本的な芳香族炭化水素。正六角形平面構造で置換反応が起きやすい。",
         recipe: "アセチレンを『赤熱鉄管触媒 (三分子重合)』に通すか、上部原料ボタンから呼び出します。",
-        tests: "臭素水を加えても常温暗所では付加せず脱色しない（付加反応しにくい置換優先）。炎をつけて燃やすと不完全燃焼により多量のすすを出して燃える。"
+        tests: "臭素水を加えても常温暗所では付加せず脱色しない（置換優先）。燃焼させると多量のすすを出して燃える。"
       },
       naphthalene: {
         id: "naphthalene", name: "ナフタレン", formula: "C₁₀H₈", group: "aromatic",
@@ -1289,7 +1293,7 @@
         id: "benzenesulfonic_acid", name: "ベンゼンスルホン酸", formula: "C₆H₅SO₃H", group: "aromatic",
         desc: "濃硫酸と加熱して得られる強酸。アルカリ融解でナトリウムフェノキシドに。",
         recipe: "ベンゼン に『濃H₂SO₄ + 加熱』を作用させてスルホン化します。",
-        tests: "水によく溶ける強酸性結晶（塩酸と同程度の強酸）。NaOHとアルカリ融解(300℃)するとナトリウムフェノキシドを与える。"
+        tests: "水によく溶ける強酸性結晶。NaOHとアルカリ融解(300℃)するとナトリウムフェノキシドを与える。"
       },
       cumene: {
         id: "cumene", name: "クメン", formula: "C₆H₅CH(CH₃)₂", group: "aromatic",
@@ -1313,31 +1317,31 @@
         id: "styrene", name: "スチレン", formula: "C₆H₅CH=CH₂", group: "aromatic",
         desc: "エチルベンゼンを脱水素して得られるビニル化合物。ポリスチレン原料。",
         recipe: "エチルベンゼン に『高温触媒脱水素 (-H₂)』を作用させます。",
-        tests: "側鎖に炭素間二重結合（ビニル基）を持つため、臭素水を滴下すると瞬時に脱色する（付加反応）。容易に付加重合してポリスチレンになる。"
+        tests: "側鎖にビニル基を持つため、臭素水を滴下すると瞬時に脱色する（付加反応）。容易に付加重合してポリスチレンになる。"
       },
       benzyl_alcohol: {
         id: "benzyl_alcohol", name: "ベンジルアルコール", formula: "C₆H₅CH₂OH", group: "aromatic",
         desc: "第一級芳香族アルコール。穏やかに酸化するとベンズアルデヒドになる。",
         recipe: "トルエン に『Cl₂ + 光 (側鎖塩素化)』を作用させて加水分解します。",
-        tests: "芳香族アルコールでありフェノール類ではないため、塩化鉄(III)水溶液を加えても紫色に呈色しない。穏やかな酸化でアルデヒドを生じる。"
+        tests: "芳香族アルコールでありフェノール類ではないため、塩化鉄(III)水溶液を加えても紫色に呈色しない。"
       },
       benzaldehyde: {
         id: "benzaldehyde", name: "ベンズアルデヒド", formula: "C₆H₅CHO", group: "aromatic",
         desc: "アーモンドの香気を持つ芳香族アルデヒド。還元性があり、酸化で安息香酸へ。",
         recipe: "ベンジルアルコール を『穏やかな酸化 (CuO等)』で一段階酸化します。",
-        tests: "還元性を示し、アンモニア性硝酸銀水溶液を加えて加温すると銀が析出する（銀鏡反応陽性）。空気酸化されやすく安息香酸になりやすい。"
+        tests: "還元性を示し、アンモニア性硝酸銀水溶液を加温すると銀鏡反応陽性。空気酸化されやすく安息香酸になりやすい。"
       },
       benzoic_acid: {
         id: "benzoic_acid", name: "安息香酸", formula: "C₆H₅COOH", group: "aromatic",
         desc: "トルエンや側鎖アルキル基を酸化して得られる代表的芳香族カルボン酸。",
         recipe: "トルエン、エチルベンゼン、またはベンズアルデヒド に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "昇華性をもつ白色針状結晶。NaHCO₃水溶液に加えると中和してCO₂の気泡を激しく発生する（カルボン酸の確認）。"
+        tests: "昇華性をもつ白色針状結晶。NaHCO₃水溶液に加えると中和してCO₂の気泡を激しく発生する。"
       },
       o_xylene: {
         id: "o_xylene", name: "o-キシレン", formula: "C₆H₄(CH₃)₂", group: "aromatic",
         desc: "オルト異性体。酸化するとフタル酸（加熱で脱水して無水フタル酸）になる。",
         recipe: "トルエン に『CH₃Cl + AlCl₃』を作用させるとキシレン3異性体が同時生成します。",
-        tests: "KMnO₄で酸化するとフタル酸を生じ、これを加熱すると分子内脱水して無水フタル酸を与える（オルト体特有の性質）。"
+        tests: "KMnO₄で酸化するとフタル酸を生じ、これを加熱すると分子内脱水して無水フタル酸を与える（オルト体特有）。"
       },
       m_xylene: {
         id: "m_xylene", name: "m-キシレン", formula: "C₆H₄(CH₃)₂", group: "aromatic",
@@ -1373,7 +1377,7 @@
         id: "terephthalic_acid", name: "テレフタル酸", formula: "C₆H₄(COOH)₂", group: "aromatic",
         desc: "p-キシレンを酸化して得られる結晶。エチレングリコールと縮合重合してPETに。",
         recipe: "p-キシレン に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "水や多くの有機溶媒に極めて溶けにくい高融点の白色粉末。エチレングリコールと縮合重合してPET樹脂になる。"
+        tests: "水や多くの有機溶媒に極めて溶けにくい高融点の白色粉末。エチレングリコールと重合してPET樹脂になる。"
       },
       cumene_hydroperoxide: {
         id: "cumene_hydroperoxide", name: "クメンヒドロペルオキシド", formula: "C₆H₅C(CH₃)₂OOH", group: "aromatic",
@@ -1385,25 +1389,25 @@
         id: "sodium_phenoxide", name: "ナトリウムフェノキシド", formula: "C₆H₅ONa", group: "aromatic",
         desc: "弱酸の塩。二酸化炭素や塩酸を通じることでフェノールが遊離する。",
         recipe: "ベンゼンスルホン酸 に『NaOH融解』、またはフェノールに『NaOH水溶液』を加えます。",
-        tests: "水溶液にCO₂（炭酸）を通じると、炭酸より弱い酸であるフェノールが遊離して白濁する（弱酸の遊離反応）。"
+        tests: "水溶液にCO₂（炭酸）を通じると、炭酸より弱い酸であるフェノールが遊離して白濁する（弱酸の遊離）。"
       },
       phenol: {
         id: "phenol", name: "フェノール", formula: "C₆H₅OH", group: "aromatic",
         desc: "弱酸性の芳香族。塩化鉄(III)で紫色に呈色し、臭素水で白色沈殿を生じる。",
         recipe: "ナトリウムフェノキシド に『CO₂ + H₂O』、またはクメンヒドロペルオキシドを『希H₂SO₄酸分解』します。",
-        tests: "①塩化鉄(III)水溶液を加えると紫色に呈色する。②臭素水を滴下すると2,4,6-トリブロモフェノールの白色沈殿を生じる。③弱酸性だが炭酸より弱いためNaHCO₃とは反応しない。"
+        tests: "①塩化鉄(III)水溶液を加えると紫色に呈色。②臭素水を滴下すると2,4,6-トリブロモフェノールの白色沈殿。③弱酸性だが炭酸より弱いためNaHCO₃とは反応しない。"
       },
       aniline_hydrochloride: {
         id: "aniline_hydrochloride", name: "アニリン塩酸塩", formula: "C₆H₅NH₃Cl", group: "aromatic",
         desc: "弱塩基の塩。水酸化ナトリウムを加えると弱塩基の遊離によりアニリンが遊離。",
         recipe: "ニトロベンゼン に『Sn + HCl (還元)』を作用させます。",
-        tests: "強塩基（NaOH水溶液）を加えると、弱塩基の遊離により水に難溶な油状のアニリンが分離遊離する。"
+        tests: "強塩基（NaOH水溶液）を加えると、弱塩基の遊離により水に難溶な油状のアニリンが遊離する。"
       },
       aniline: {
         id: "aniline", name: "アニリン", formula: "C₆H₅NH₂", group: "aromatic",
         desc: "代表的な芳香族第一級アミン。弱塩基性。無水酢酸でアセチル化されてアセトアニリドへ。",
         recipe: "アニリン塩酸塩 に『NaOH 水溶液』を加えて弱塩基を遊離させます。",
-        tests: "①さらし粉水溶液を加えると赤紫色に呈色する。②二クロム酸カリウムで酸化するとアニリンブラック（黒色）を生じる。③氷冷下で亜硝酸ナトリウムと塩酸を加えるとジアゾ化する。"
+        tests: "①さらし粉水溶液を加えると赤紫色に呈色。②二クロム酸カリウムで酸化するとアニリンブラックを生じる。③氷冷下でジアゾ化する。"
       },
       acetanilide: {
         id: "acetanilide", name: "アセトアニリド", formula: "C₆H₅NHCOCH₃", group: "aromatic",
@@ -1415,7 +1419,7 @@
         id: "benzene_diazonium_chloride", name: "塩化ベンゼンジアゾニウム", formula: "C₆H₅N₂⁺Cl⁻", group: "aromatic",
         desc: "氷冷下(5℃以下)でジアゾ化して得られる不安定塩。温水で分解してフェノールへ。",
         recipe: "アニリン に『NaNO₂ + HCl (氷冷5℃以下)』を作用させます。",
-        tests: "熱に極めて不安定で、水溶液を温めると窒素ガスを放出してフェノールに加水分解する。塩基性下でフェノール類とカップリングして橙赤色染料を作る。"
+        tests: "熱に極めて不安定で、温めると窒素ガスを放出してフェノールに加水分解。塩基性下でカップリングして橙赤色染料を作る。"
       },
       p_hydroxyazobenzene: {
         id: "p_hydroxyazobenzene", name: "p-ヒドロキシアゾベンゼン", formula: "C₆H₅-N=N-C₆H₄OH", group: "aromatic",
@@ -1427,13 +1431,13 @@
         id: "tribromophenol", name: "2,4,6-トリブロモフェノール", formula: "C₆H₂Br₃OH", group: "aromatic",
         desc: "フェノール水溶液に臭素水を加えると生じる白色沈殿（2,4,6位にBrが結合）。",
         recipe: "フェノール に『臭素水 (Br₂ aq)』を加えます。",
-        tests: "フェノールのヒドロキシ基による強烈なオルト・パラ配向性により、臭素水を通じるだけで瞬時に生成する特異的な白色沈殿。"
+        tests: "フェノールの強いオルト・パラ配向性により、臭素水を通じるだけで瞬時に生成する白色沈殿。"
       },
       picric_acid: {
         id: "picric_acid", name: "2,4,6-トリニトロフェノール (ピクリン酸)", formula: "C₆H₂(NO₂)₃OH", group: "aromatic",
         desc: "フェノールを濃硝酸・濃硫酸で強烈にニトロ化した黄色結晶の強酸。",
         recipe: "フェノール に『混酸 (濃HNO₃+濃H₂SO₄)』を加えて加熱します。",
-        tests: "3つのニトロ基の電子求引性により、無機酸並みの強酸性を示す黄色針状結晶。かつて爆薬として使用された。"
+        tests: "3つのニトロ基により無機酸並みの強酸性を示す黄色針状結晶。かつて爆薬として使用された。"
       },
       sodium_salicylate: {
         id: "sodium_salicylate", name: "サリチル酸ナトリウム", formula: "C₆H₄(OH)COONa", group: "aromatic",
@@ -1445,39 +1449,39 @@
         id: "salicylic_acid", name: "サリチル酸", formula: "C₆H₄(OH)COOH", group: "aromatic",
         desc: "フェノール性とカルボン酸の両方の性質を持つ二官能性化合物。",
         recipe: "サリチル酸ナトリウム に『HCl 希塩酸』を加えて弱酸を遊離させます。",
-        tests: "①塩化鉄(III)で赤紫色に呈色（フェノール性OH基）。②NaHCO₃水溶液で気泡CO₂を発生（カルボキシ基）。③メタノールとエステル化、無水酢酸とアセチル化の両方が可能。"
+        tests: "①塩化鉄(III)で赤紫色に呈色（フェノール性OH）。②NaHCO₃水溶液で気泡CO₂を発生（カルボキシ基）。"
       },
       acetylsalicylic_acid: {
         id: "acetylsalicylic_acid", name: "アセチルサリチル酸 (アスピリン)", formula: "C₆H₄(OCOCH₃)COOH", group: "aromatic",
         desc: "サリチル酸のOH基をアセチル化。酸性を示す代表的解熱鎮痛消炎剤。",
         recipe: "サリチル酸 に『無水酢酸』を加えてアセチル化します。",
-        tests: "フェノール性OH基がエステル化されているため、塩化鉄(III)を加えても呈色しない（サリチル酸との判別ポイント）。NaHCO₃水溶液には溶けて発泡する。"
+        tests: "フェノール性OH基がエステル化されているため、塩化鉄(III)を加えても呈色しない（サリチル酸との区別点）。"
       },
       methyl_salicylate: {
         id: "methyl_salicylate", name: "サリチル酸メチル", formula: "C₆H₄(OH)COOCH₃", group: "aromatic",
         desc: "サリチル酸のCOOH基をエステル化。特有の香気（湿布薬の匂い）を持つ。",
         recipe: "サリチル酸 に『CH₃OH + 濃H₂SO₄』を加えて加熱エステル化します。",
-        tests: "フェノール性OH基が残っているため、塩化鉄(III)水溶液を加えると紫色に呈色する（アスピリンとの明確な識別点）。湿布薬特有の強い芳香をもつ。"
+        tests: "フェノール性OH基が残っているため、塩化鉄(III)水溶液を加えると紫色に呈色する。湿布薬特有の香気を持つ。"
       },
       tnt: {
         id: "tnt", name: "2,4,6-トリニトロトルエン (TNT)", formula: "C₆H₂(CH₃)(NO₂)₃", group: "aromatic",
         desc: "トルエンを段階的に激しくニトロ化して得られる強力な軍用爆薬。",
         recipe: "トルエン に『混酸』を加えて高温で徹底的にニトロ化します。",
-        tests: "淡黄色結晶で衝撃に対して比較的安定な強力火薬。"
+        tests: "淡黄色結晶で衝撃に対して比較的安定な軍用火薬。"
       },
 
-      // --- 脂肪族 ---
+      // --- 脂肪族 (27種) ---
       acetylene: {
         id: "acetylene", name: "アセチレン", formula: "C₂H₂", group: "aliphatic",
         desc: "最も単純なアルキン。炭素間三重結合を持ち、付加反応や三分子重合でベンゼンを与える。",
         recipe: "上部原料ボタンの『≡ アセチレン』を押して実験台に用意します。",
-        tests: "臭素水を脱色する。アンモニア性硝酸銀水溶液を通じると銀アセチリドの灰白色沈殿、アンモニア性塩化銅(I)で赤色沈殿を生じる。"
+        tests: "臭素水を脱色する。アンモニア性硝酸銀水溶液を通じると銀アセチリドの灰白色沈殿を生じる。"
       },
       ethylene: {
         id: "ethylene", name: "エチレン", formula: "C₂H₄", group: "aliphatic",
         desc: "最も単純なアルケン。エタノールの濃硫酸脱水(170℃)や付加重合でポリエチレンになる。",
-        recipe: "エタノール に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させるか、アセチレンを接触還元します。",
-        tests: "臭素水（赤褐色）を通じると付加反応（1,2-ジブロモエタン生成）により速やかに脱色する。"
+        recipe: "エタノール に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させるか、アセチレンを水素添加します。",
+        tests: "臭素水（赤褐色）を通じると付加反応により速やかに脱色する。"
       },
       ethane: {
         id: "ethane", name: "エタン", formula: "C₂H₆", group: "aliphatic",
@@ -1493,63 +1497,63 @@
       },
       propane: {
         id: "propane", name: "プロパン", formula: "C₃H₈", group: "aliphatic",
-        desc: "炭素数3の飽和脂肪族アルカン。LPガスの主成分。脱水素するとプロピレンを生じる。",
-        recipe: "プロピレン に『H₂ + Ni触媒』で水素付加するか、1/2-プロパノールから合成します。",
-        tests: "常温常圧で無色の可燃性気体。二重結合を持たないため臭素水を脱色しない。"
+        desc: "炭素数3のアルカン。プロピレンに水素付加して得られる飽和炭化水素。",
+        recipe: "プロピレン に『H₂ + Ni触媒』を作用させて水素添加します。",
+        tests: "LPガスの主成分。不飽和結合を持たないため臭素水を脱色しない。"
       },
       propylene: {
         id: "propylene", name: "プロピレン (プロペン)", formula: "C₃H₆", group: "aliphatic",
         desc: "炭素数3のアルケン。水和するとマルコフニコフ則に従い主に2-プロパノールになる。",
-        recipe: "2-プロパノール (または1-プロパノール) に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させます。",
-        tests: "臭素水を瞬時に脱色する（不飽和結合の確認）。酸触媒下で水を付加すると、マルコフニコフ則により2-プロパノールが主生成物として得られる。"
+        recipe: "2-プロパノール または 1-プロパノール に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させます。",
+        tests: "臭素水を瞬時に脱色する。酸触媒下で水を付加すると、マルコフニコフ則により2-プロパノールが主生成物として得られる。"
       },
       methanol: {
         id: "methanol", name: "メタノール", formula: "CH₃OH", group: "aliphatic",
         desc: "最も単純な第一級アルコール。酸化するとホルムアルデヒド、さらにギ酸になる。",
         recipe: "上部原料ボタンの『CH₃OH メタノール』を押して実験台に用意します。",
-        tests: "酸化すると刺激臭のあるホルムアルデヒドを経てギ酸を生じる。CH₃CH(OH)- 構造を持たないためヨードホルム反応は陰性。"
+        tests: "酸化すると刺激臭のあるホルムアルデヒドを経てギ酸を生じる。ヨードホルム反応は陰性。"
       },
       ethanol: {
         id: "ethanol", name: "エタノール", formula: "C₂H₅OH", group: "aliphatic",
         desc: "酒類の主成分。酸化するとアセトアルデヒドを経て酢酸になる。脱水温度で生成物が変化。",
         recipe: "上部原料ボタンの『C₂H₅OH エタノール』を押すか、エチレンに水を付加させます。",
-        tests: "①I₂とNaOH水溶液を加えて温めると黄色沈殿CHI₃を生じる（ヨードホルム反応陽性）。②二クロム酸カリウムを赤橙色から緑色に変えて酸化される。"
+        tests: "I₂とNaOH水溶液を加えて温めると黄色沈殿CHI₃を生じる（ヨードホルム反応陽性）。"
       },
       formaldehyde: {
         id: "formaldehyde", name: "ホルムアルデヒド", formula: "HCHO", group: "aliphatic",
         desc: "メタノールの酸化生成物。37%水溶液はホルマリン。強い刺激臭と還元性を持つ。",
         recipe: "メタノール に『穏やかな酸化 (CuO等)』を作用させます。",
-        tests: "刺激臭気体。強い還元性を持ち、銀鏡反応・フェーリング反応ともに陽性。フェノールや尿素と付加縮合して合成樹脂を作る。"
+        tests: "強い還元性を持ち、銀鏡反応・フェーリング反応ともに陽性。フェノールや尿素と付加縮合する。"
       },
       formic_acid: {
         id: "formic_acid", name: "ギ酸", formula: "HCOOH", group: "aliphatic",
         desc: "分子内にカルボキシ基とアルデヒド基の両方を持ち、カルボン酸でありながら還元性を示す。",
         recipe: "メタノール または ホルムアルデヒド に『KMnO₄』を作用させて酸化します。",
-        tests: "カルボン酸でありながらアルデヒド基（-CHO）を併せ持つため、水銀鏡反応やフェーリング反応を示し、濃硫酸と加熱すると一酸化炭素COを発生して脱水分解する。"
+        tests: "カルボン酸でありながらアルデヒド基を併せ持つため、銀鏡反応やフェーリング反応を示す。"
       },
       acetaldehyde: {
         id: "acetaldehyde", name: "アセトアルデヒド", formula: "CH₃CHO", group: "aliphatic",
         desc: "エタノールの酸化やアセチレンへの水付加で生成。銀鏡反応やフェーリング反応を示す。",
         recipe: "エタノール を『穏やかな酸化』するか、アセチレンに『H₂O + HgSO₄』を作用させます。",
-        tests: "①銀鏡反応・フェーリング液還元反応ともに陽性。②CH₃CO- 構造を持つためヨードホルム反応陽性（黄色沈殿）。"
+        tests: "①銀鏡反応・フェーリング反応陽性。②CH₃CO- 構造を持つためヨードホルム反応陽性。"
       },
       acetic_acid: {
         id: "acetic_acid", name: "酢酸", formula: "CH₃COOH", group: "aliphatic",
         desc: "食酢の主成分。弱酸性。加熱脱水で無水酢酸を生じる。",
         recipe: "エタノール または アセトアルデヒド に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "刺激臭をもつ酸性液体（純度が高いものは冬季に凝固して氷酢酸となる）。NaHCO₃に加えると発泡する。"
+        tests: "刺激臭をもつ酸性液体。NaHCO₃に加えると発泡してCO₂を発生する。"
       },
       ethyl_acetate: {
         id: "ethyl_acetate", name: "酢酸エチル", formula: "CH₃COOC₂H₅", group: "aliphatic",
         desc: "酢酸とエタノールを濃硫酸触媒で脱水縮合して得られる果実臭の芳香性エステル。",
         recipe: "酢酸 に『C₂H₅OH + 濃H₂SO₄』を加えて加熱エステル化します。",
-        tests: "心地よい果実臭を持つ水に浮く中性液体。NaOH水溶液を加えて加熱するとけん化（加水分解）されて水層に均一化する。"
+        tests: "果実臭を持つ中性液体。NaOH水溶液を加えて加熱するとけん化されて水和する。"
       },
       diethyl_ether: {
         id: "diethyl_ether", name: "ジエチルエーテル", formula: "C₂H₅OC₂H₅", group: "aliphatic",
         desc: "エタノールに濃硫酸を加えて約130℃に加熱すると分子間脱水により生成する揮発性液体。",
         recipe: "エタノール に『濃H₂SO₄ (130℃ 加熱)』を作用させます。",
-        tests: "水より軽く揮発性と引火性が極めて高い中性液体。ナトリウム金属を加えても水素を発生しない（アルコールとの区別点）。"
+        tests: "揮発性と引火性が極めて高い中性液体。ナトリウム金属を加えても水素を発生しない。"
       },
       ethylene_glycol: {
         id: "ethylene_glycol", name: "エチレングリコール", formula: "C₂H₄(OH)₂", group: "aliphatic",
@@ -1567,7 +1571,7 @@
         id: "acetone", name: "アセトン", formula: "CH₃COCH₃", group: "aliphatic",
         desc: "2-プロパノールの酸化やクメン法で生じる代表的ケトン。ヨードホルム反応陽性。",
         recipe: "2-プロパノール に『穏やかな酸化 (CuO等)』を作用させるか、クメンヒドロペルオキシドを酸分解します。",
-        tests: "①CH₃CO- 構造を持つためヨードホルム反応陽性（黄色特異臭沈殿）。②ケトンのため還元性を持たず、銀鏡反応・フェーリング反応ともに陰性（アルデヒドとの区別点）。"
+        tests: "①CH₃CO- 構造を持つためヨードホルム反応陽性。②ケトンのため銀鏡反応・フェーリング反応は陰性。"
       },
       "2_propanol": {
         id: "2_propanol", name: "2-プロパノール (イソプロパノール)", formula: "CH₃CH(OH)CH₃", group: "aliphatic",
@@ -1578,8 +1582,8 @@
       "1_propanol": {
         id: "1_propanol", name: "1-プロパノール", formula: "CH₃CH₂CH₂OH", group: "aliphatic",
         desc: "第一級アルコール。酸化するとプロピオンアルデヒド、さらにプロピオン酸になる。",
-        recipe: "プロピレンやプロパンの誘導、または図鑑からセットします。",
-        tests: "第一級アルコールのためヨードホルム反応は陰性。濃硫酸と加熱脱水するとプロピレンを生じる。"
+        recipe: "図鑑から呼び出すか、プロピレン関連生成物としてセットします。",
+        tests: "第一級アルコールのためヨードホルム反応は陰性。濃硫酸と170℃加熱脱水するとプロピレンを生じる。"
       },
       vinyl_chloride: {
         id: "vinyl_chloride", name: "塩化ビニル", formula: "CH₂=CHCl", group: "aliphatic",
@@ -1591,13 +1595,13 @@
         id: "vinyl_acetate", name: "酢酸ビニル", formula: "CH₂=CHOCOCH₃", group: "aliphatic",
         desc: "アセチレンに酢酸を付加して得られるエステル。付加重合でポリ酢酸ビニルへ。",
         recipe: "アセチレン に『CH₃COOH (酸付加)』を作用させます。",
-        tests: "付加重合してポリ酢酸ビニルになり、これをNaOHでけん化するとポリビニルアルコール（PVA）を生じる。"
+        tests: "付加重合してポリ酢酸ビニルになり、これをNaOHでけん化するとポリビニルアルコールを生じる。"
       },
       polyvinyl_alcohol: {
         id: "polyvinyl_alcohol", name: "ポリビニルアルコール (PVA)", formula: "[-CH₂CH(OH)-]ₙ", group: "aliphatic",
         desc: "ポリ酢酸ビニルをけん化して得られる水溶性高分子。ホルムアルデヒド処理でビニロンに。",
         recipe: "酢酸ビニル に『NaOH 水溶液 (けん化)』を作用させます。",
-        tests: "多数の親水性ヒドロキシ基を持つため水溶性。ホルムアルデヒドでアセタール化処理（約40%）すると、耐水性合成繊維ビニロンになる。"
+        tests: "多数の親水性ヒドロキシ基を持つため水溶性。ホルムアルデヒドでアセタール化処理するとビニロンになる。"
       },
       chloromethane: {
         id: "chloromethane", name: "クロロメタン", formula: "CH₃Cl", group: "aliphatic",
@@ -1615,7 +1619,7 @@
         id: "chloroform", name: "クロロホルム", formula: "CHCl₃", group: "aliphatic",
         desc: "メタンの塩素化で生成する麻酔性溶媒。",
         recipe: "ジクロロメタン に『Cl₂ + 光 (紫外線)』を作用させます。",
-        tests: "特有の甘い芳香をもつ重い揮発性液体。光と空気で有毒なホスゲンCOCl₂に酸化分解されやすいため褐色瓶に保存する。"
+        tests: "特有の甘い芳香をもつ重い揮発性液体。光と空気で有毒なホスゲンに分解しやすい。"
       },
       carbon_tetrachloride: {
         id: "carbon_tetrachloride", name: "四塩化炭素", formula: "CCl₄", group: "aliphatic",
@@ -1627,13 +1631,13 @@
         id: "iodoform", name: "ヨードホルム", formula: "CHI₃", group: "aliphatic",
         desc: "アセトンやエタノールにヨウ素とNaOHを作用させると生じる特異臭のある黄色沈殿。",
         recipe: "エタノール、アセトアルデヒド、2-プロパノール、またはアセトン に『I₂ + NaOH 水溶液』を加えます。",
-        tests: "薬品臭（消毒薬臭）を持つ鮮やかな黄色結晶。CH₃CO- または CH₃CH(OH)- 構造の検出に不可欠。"
+        tests: "消毒薬特有の臭気を持つ鮮やかな黄色結晶。CH₃CO- または CH₃CH(OH)- 構造の検出に不可欠。"
       },
       maleic_acid: {
         id: "maleic_acid", name: "マレイン酸", formula: "C₄H₄O₄", group: "aliphatic",
         desc: "ベンゼンを酸化バナジウム触媒で高温空気酸化して得られるシス形ジカルボン酸。",
         recipe: "ベンゼン に『V₂O₅触媒 + 高温空気酸化』を作用させて酸化開裂させます。",
-        tests: "シス異性体。2つのカルボキシ基が空間的に近いため、加熱すると容易に脱水して無水マレイン酸になる（トランス形のフマル酸との決定的相違点）。"
+        tests: "シス異性体。2つのカルボキシ基が空間的に近いため、加熱すると容易に脱水して無水マレイン酸になる（トランス形フマル酸との相違点）。"
       },
       maleic_anhydride: {
         id: "maleic_anhydride", name: "無水マレイン酸", formula: "C₄H₂O₃", group: "aliphatic",
@@ -1645,7 +1649,7 @@
         id: "pet", name: "ポリエチレンテレフタラート (PET)", formula: "[-COC₆H₄COOCH₂CH₂O-]ₙ", group: "aliphatic",
         desc: "テレフタル酸とエチレングリコールがエステル結合で縮合重合した合成ポリエステル樹脂。",
         recipe: "テレフタル酸 に『エチレングリコール』を加えて脱水縮合重合させます。",
-        tests: "耐熱性・透明性・耐薬品性に優れた代表的ポリエステル繊維・プラスチックボトル材料。"
+        tests: "耐熱性・透明性・耐薬品性に優れた代表的ポリエステル繊維・ペットボトル材料。"
       }
     };
 
@@ -1692,4 +1696,538 @@
       { id: "ethylene_glycol", name: "エチレングリコール", cat: "organic", detail: "縮合重合 (PET合成)" },
       { id: "nano2_hcl", name: "NaNO₂ + HCl (氷冷5℃以下)", cat: "organic", detail: "ジアゾ化" },
       { id: "phenol_naoh", name: "ナトリウムフェノキシド", cat: "organic", detail: "カップリング反応" },
-      { id: "h
+      { id: "h2so4_dil", name: "希H₂SO₄ (酸分解)", cat: "organic", detail: "クメン法分解" }
+    ];
+
+    /* ========================================================
+       4. 反応遷移ルール
+       ======================================================== */
+    const TRANSITIONS = [
+      // === アセチレン系 ===
+      { from: "acetylene", reagent: "polymerize_trimer", to: "benzene", log: "アセチレン3分子が赤熱した鉄管内で環化三分子重合し、ベンゼンが生成しました！(脂肪族➔芳香族)" },
+      { from: "acetylene", reagent: "h2_ni", to: "ethylene", log: "接触水素添加により三重結合が部分還元され、エチレンが生成しました。" },
+      { from: "acetylene", reagent: "hcl_gas", to: "vinyl_chloride", log: "アセチレンに塩化水素が付加し、塩化ビニルが生成しました。" },
+      { from: "acetylene", reagent: "h2o_hgso4", to: "acetaldehyde", log: "水和反応で生じた不安定なビニルアルコールがケト・エノール互変異性によりアセトアルデヒドになりました！" },
+      { from: "acetylene", reagent: "acetic_acid_add", to: "vinyl_acetate", log: "アセチレンに酢酸が付加し、酢酸ビニルが生成しました。" },
+
+      // === エチレン・エタン系 ===
+      { from: "ethylene", reagent: "h2_ni", to: "ethane", log: "水素付加により二重結合が飽和され、エタンが生成しました。" },
+      { from: "ethylene", reagent: "h2o_h2so4", to: "ethanol", log: "酸触媒下で水が付加し、エタノールが生成しました。" },
+      { from: "ethylene", reagent: "o2_air", to: "ethylene_oxide", log: "銀触媒下で穏やかに酸化され、三員環のエチレンオキシドが生成しました。" },
+      { from: "ethylene_oxide", reagent: "h2o_heat", to: "ethylene_glycol", log: "酸触媒下で開環水和し、エチレングリコールが生成しました。" },
+
+      // === エタノール・アセトアルデヒド・酢酸系 ===
+      { from: "ethanol", reagent: "mild_ox", to: "acetaldehyde", log: "穏やかに酸化され、アセトアルデヒドが生成しました。" },
+      { from: "ethanol", reagent: "kmno4", to: "acetic_acid", log: "強く酸化され、酢酸が生成しました。" },
+      { from: "ethanol", reagent: "h2so4_170", to: "ethylene", log: "濃硫酸存在下、170℃で分子内脱水が起こり、エチレンが生成しました。" },
+      { from: "ethanol", reagent: "h2so4_130", to: "diethyl_ether", log: "濃硫酸存在下、130℃で2分子のエタノールが分子間脱水し、ジエチルエーテルが生成しました。" },
+      { from: "ethanol", reagent: "i2_naoh", to: "iodoform", log: "CH₃CH(OH)- 構造を持つためヨードホルム反応を起こし、黄色沈殿(CHI₃)が生じました！" },
+      { from: "acetaldehyde", reagent: "kmno4", to: "acetic_acid", log: "還元性を持つアルデヒド基が酸化され、酢酸になりました。" },
+      { from: "acetaldehyde", reagent: "mild_ox", to: "acetic_acid", log: "酸化されて酢酸になりました。" },
+      { from: "acetaldehyde", reagent: "i2_naoh", to: "iodoform", log: "CH₃CO- 構造を持つためヨードホルム反応を起こし、黄色沈殿が生じました！" },
+      { from: "acetic_acid", reagent: "c2h5oh_h2so4", to: "ethyl_acetate", log: "濃硫酸触媒でエタノールと脱水縮合し、芳香のある酢酸エチルが生成しました。" },
+      { from: "ethyl_acetate", reagent: "naoh_aq", to: "ethanol", log: "強塩基でけん化（加水分解）され、エタノールと酢酸塩になりました。" },
+      { from: "vinyl_acetate", reagent: "naoh_aq", to: "polyvinyl_alcohol", log: "けん化反応によりポリビニルアルコール(PVA)が得られました。" },
+
+      // === メタノール・ホルムアルデヒド・ギ酸系 ===
+      { from: "methanol", reagent: "mild_ox", to: "formaldehyde", log: "第一級アルコールが穏やかに酸化され、刺激臭のあるホルムアルデヒドが生じました。" },
+      { from: "methanol", reagent: "kmno4", to: "formic_acid", log: "強く酸化され、還元性を持つカルボン酸であるギ酸が生成しました。" },
+      { from: "formaldehyde", reagent: "kmno4", to: "formic_acid", log: "アルデヒド基が酸化され、ギ酸になりました。" },
+
+      // === メタン・ハロゲン化系 ===
+      { from: "methane", reagent: "cl2_light", to: "chloromethane", log: "光照射下でラジカル置換反応が起き、クロロメタンが生成しました。" },
+      { from: "chloromethane", reagent: "cl2_light", to: "dichloromethane", log: "さらに塩素が置換し、ジクロロメタンが生成しました。" },
+      { from: "dichloromethane", reagent: "cl2_light", to: "chloroform", log: "さらに塩素が置換し、クロロホルムが生成しました。" },
+      { from: "chloroform", reagent: "cl2_light", to: "carbon_tetrachloride", log: "すべての水素が置換され、四塩化炭素が生成しました。" },
+
+      // === プロピレン合成＆プロパノール・アセトン系 ===
+      { from: "2_propanol", reagent: "h2so4_170", to: "propylene", log: "2-プロパノールに濃硫酸を加え170℃で加熱脱水し、プロピレン(プロペン)が生成しました！" },
+      { from: "1_propanol", reagent: "h2so4_170", to: "propylene", log: "1-プロパノールに濃硫酸を加え170℃で加熱脱水し、プロピレンが生成しました！" },
+      { from: "propylene", reagent: "h2o_h2so4", to: "2_propanol", log: "マルコフニコフ則に従い、水素の多い炭素にHが付加して主に2-プロパノールが生成しました！" },
+      { from: "propylene", reagent: "h2_ni", to: "propane", log: "接触水素添加により二重結合が還元され、プロパンが生成しました。" },
+      { from: "propane", reagent: "dehydrogenation", to: "propylene", log: "高温触媒下で脱水素(-H₂)し、プロピレンが生成しました。" },
+      { from: "2_propanol", reagent: "mild_ox", to: "acetone", log: "第二級アルコールが酸化され、アセトンが生成しました。" },
+      { from: "acetone", reagent: "i2_naoh", to: "iodoform", log: "CH₃COCH₃ がヨードホルム反応を起こし、黄色沈殿のヨードホルム(CHI₃)が生じました！" },
+
+      // === ベンゼン・マレイン酸開裂系 ===
+      { from: "benzene", reagent: "cl2_fe", to: "chlorobenzene", log: "ベンゼンに鉄触媒で塩素を通じ、クロロベンゼンが生成しました。(置換反応)" },
+      { from: "benzene", reagent: "cl2_light", to: "bhc", log: "光照射下で塩素を付加させ、BHC(ベンゼンヘキサクロリド)が生成しました。" },
+      { from: "benzene", reagent: "h2_ni", to: "cyclohexane", log: "ニッケル触媒で水素を高圧付加し、シクロヘキサンが生成しました。" },
+      { from: "benzene", reagent: "mixed_acid", to: "nitrobenzene", log: "混酸(濃硝酸+濃硫酸)と加熱し、ニトロベンゼンが生成しました。(ニトロ化)" },
+      { from: "benzene", reagent: "h2so4_heat", to: "benzenesulfonic_acid", log: "濃硫酸と加熱し、ベンゼンスルホン酸が生成しました。(スルホン化)" },
+      { from: "benzene", reagent: "propylene", to: "cumene", log: "触媒下でプロピレンを付加させ、クメンが生成しました。" },
+      { from: "benzene", reagent: "ch3cl", to: "toluene", log: "塩化アルミニウム触媒で塩化メチルを反応させ、トルエンが生成しました。(アルキル化)" },
+      { from: "benzene", reagent: "ethylene", to: "ethylbenzene", log: "酸触媒下でエチレンを付加させ、エチルベンゼンが生成しました！" },
+      { from: "benzene", reagent: "v2o5_ox", to: "maleic_acid", log: "V₂O₅触媒下、高温で空気酸化することによりベンゼン環が開裂し、マレイン酸が生成しました！" },
+      { from: "maleic_acid", reagent: "heat_dehydrate", to: "maleic_anhydride", log: "マレイン酸はシス形であるため、加熱により容易に分子内脱水して無水マレイン酸が生成しました！" },
+      { from: "maleic_anhydride", reagent: "h2o_heat", to: "maleic_acid", log: "無水マレイン酸に水を加えて加温すると、水和・開環してマレイン酸に戻りました。" },
+
+      // === ナフタレン系 ===
+      { from: "naphthalene", reagent: "v2o5_ox", to: "phthalic_acid", log: "ナフタレンをV₂O₅触媒下で高温空気酸化し、片方の環が開裂してフタル酸が生成しました！" },
+      { from: "naphthalene", reagent: "kmno4", to: "phthalic_acid", log: "過マンガン酸カリウムでナフタレンの環を酸化開裂させ、フタル酸が生成しました。" },
+
+      // === トルエン・キシレン系 ===
+      { from: "toluene", reagent: "mixed_acid", to: "tnt", log: "段階的に強力にニトロ化され、爆薬2,4,6-トリニトロトルエン(TNT)が生成しました。" },
+      { from: "toluene", reagent: "kmno4", to: "benzoic_acid", log: "過マンガン酸カリウムでメチル基を強く酸化し、安息香酸が生成しました。" },
+      { from: "toluene", reagent: "cl2_light", to: "benzyl_alcohol", log: "光照射下で側鎖を塩素化(C₆H₅CH₂Cl)し、続けて加水分解してベンジルアルコールが生成しました！" },
+      { 
+        from: "toluene", 
+        reagent: "ch3cl", 
+        to: "o_xylene", 
+        isomers: ["o_xylene", "m_xylene", "p_xylene"],
+        log: "トルエンをアルキル化(CH₃Cl + AlCl₃)し、3種類のキシレン異性体(o-, m-, p-)が生成しました！" 
+      },
+
+      // === エチルベンゼン・スチレン系 ===
+      { from: "ethylbenzene", reagent: "dehydrogenation", to: "styrene", log: "エチルベンゼンを高温触媒下で脱水素(-H₂)し、スチレンが生成しました！" },
+      { from: "ethylbenzene", reagent: "kmno4", to: "benzoic_acid", log: "エチルベンゼンの側鎖を過マンガン酸カリウムで酸化し、安息香酸が生成しました。" },
+      { from: "benzyl_alcohol", reagent: "mild_ox", to: "benzaldehyde", log: "第一級アルコールのベンジルアルコールを穏やかに酸化し、ベンズアルデヒドが生成しました！" },
+      { from: "benzyl_alcohol", reagent: "kmno4", to: "benzoic_acid", log: "強く酸化して直接安息香酸に変化しました。" },
+      { from: "benzaldehyde", reagent: "kmno4", to: "benzoic_acid", log: "ベンズアルデヒドを酸化し、安息香酸が生成しました。" },
+
+      // === フタル酸・PET系 ===
+      { from: "o_xylene", reagent: "kmno4", to: "phthalic_acid", log: "過マンガン酸カリウムで2つのメチル基が酸化され、フタル酸が生成しました。" },
+      { from: "phthalic_acid", reagent: "heat_dehydrate", to: "phthalic_anhydride", log: "隣り合うカルボキシ基が加熱脱水し、環状の無水フタル酸が生成しました。" },
+      { from: "phthalic_anhydride", reagent: "h2o_heat", to: "phthalic_acid", log: "水和・加水分解により、フタル酸に戻りました。" },
+      { from: "m_xylene", reagent: "kmno4", to: "isophthalic_acid", log: "酸化によりメタ位のジカルボン酸であるイソフタル酸が生成しました。" },
+      { from: "p_xylene", reagent: "kmno4", to: "terephthalic_acid", log: "酸化によりパラ位のテレフタル酸が生成しました。(PET合成原料)" },
+      { from: "terephthalic_acid", reagent: "ethylene_glycol", to: "pet", log: "エチレングリコールと加熱して脱水縮合重合し、ポリエチレンテレフタラート(PET)が生成しました！" },
+
+      // === ニトロベンゼン・アニリン・ジアゾ系 ===
+      { from: "nitrobenzene", reagent: "sn_hcl", to: "aniline_hydrochloride", log: "スズと塩酸で還元し、アニリン塩酸塩(白色結晶)が生成しました。" },
+      { from: "aniline_hydrochloride", reagent: "naoh_aq", to: "aniline", log: "NaOHを加えることで弱塩基が遊離し、油状のアニリンが遊離しました。" },
+      { from: "aniline", reagent: "hcl_aq", to: "aniline_hydrochloride", log: "塩酸を加えて中和し、再びアニリン塩酸塩になりました。" },
+      { from: "aniline", reagent: "acetic_anhydride", to: "acetanilide", log: "無水酢酸と加熱し、アセトアニリドが生成しました。(アセチル化)" },
+      { from: "aniline", reagent: "nano2_hcl", to: "benzene_diazonium_chloride", log: "氷冷下(5℃以下)で亜硝酸ナトリウムと塩酸を加え、塩化ベンゼンジアゾニウムが生成しました。(ジアゾ化)" },
+      { from: "benzene_diazonium_chloride", reagent: "h2o_heat", to: "phenol", log: "ジアゾニウム水溶液を温めることで窒素が抜け、フェノールに加水分解しました。" },
+      { from: "benzene_diazonium_chloride", reagent: "phenol_naoh", to: "p_hydroxyazobenzene", log: "塩基性下でナトリウムフェノキシドと反応し、橙赤色のp-ヒドロキシアゾベンゼンが生成しました。(カップリング)" },
+
+      // === フェノール・サリチル酸系 ===
+      { from: "benzenesulfonic_acid", reagent: "naoh_melt", to: "sodium_phenoxide", log: "固体のNaOHとともに融解(300℃)させ、ナトリウムフェノキシドが生成しました。(アルカリ融解)" },
+      { from: "chlorobenzene", reagent: "naoh_melt", to: "sodium_phenoxide", log: "高温・高圧下で水酸化ナトリウム水溶液と反応させ、ナトリウムフェノキシドが生成しました。" },
+      { from: "cumene", reagent: "o2_air", to: "cumene_hydroperoxide", log: "空気を吹き込んで穏やかに酸化させ、クメンヒドロペルオキシドが生成しました。" },
+      { from: "cumene_hydroperoxide", reagent: "h2so4_dil", to: "phenol", log: "希硫酸で酸分解し、フェノールとアセトンが生成しました。(クメン法)" },
+      { from: "sodium_phenoxide", reagent: "co2_gas", to: "phenol", log: "二酸化炭素を通じることで炭酸より弱い酸であるフェノールが遊離しました。(弱酸の遊離)" },
+      { from: "sodium_phenoxide", reagent: "hcl_aq", to: "phenol", log: "強酸の塩酸を加えたため、フェノールが遊離しました。" },
+      { from: "phenol", reagent: "naoh_aq", to: "sodium_phenoxide", log: "NaOH水溶液を加えて中和し、ナトリウムフェノキシド水溶液になりました。" },
+      { from: "phenol", reagent: "br2_aq", to: "tribromophenol", log: "臭素水を加えると瞬時に2,4,6位が置換され、2,4,6-トリブロモフェノールの白色沈殿が生じました！" },
+      { from: "phenol", reagent: "mixed_acid", to: "picric_acid", log: "濃硝酸・濃硫酸で激しくニトロ化され、黄色結晶のピクリン酸が生成しました。" },
+      { from: "sodium_phenoxide", reagent: "co2_high_press", to: "sodium_salicylate", log: "高温・高圧(125℃, 数気圧)でCO₂を作用させ、サリチル酸ナトリウムが生成しました。" },
+      { from: "sodium_salicylate", reagent: "hcl_aq", to: "salicylic_acid", log: "塩酸を加え、弱酸であるサリチル酸の白色結晶が遊離しました。" },
+      { from: "salicylic_acid", reagent: "naoh_aq", to: "sodium_salicylate", log: "NaOHで中和され、サリチル酸ナトリウムに戻りました。" },
+      { from: "salicylic_acid", reagent: "acetic_anhydride", to: "acetylsalicylic_acid", log: "無水酢酸によりヒドロキシ基がアセチル化され、解熱鎮痛剤アスピリン(アセチルサリチル酸)が生成しました。" },
+      { from: "salicylic_acid", reagent: "ch3oh_h2so4", to: "methyl_salicylate", log: "濃硫酸触媒でメタノールとエステル化し、湿布の香りのサリチル酸メチルが生成しました。" }
+    ];
+
+    /* ========================================================
+       5. 状態管理
+       ======================================================== */
+    let currentCompoundId = "benzene";
+    let isAssistMode = false;
+    let currentCategory = "sub_add";
+    let currentBookFilter = "all";
+
+    const INITIAL_DISCOVERED = ["benzene", "naphthalene", "acetylene", "methane", "methanol", "ethanol"];
+    let discoveredCompounds = new Set(INITIAL_DISCOVERED);
+    let currentTargetId = "acetaldehyde";
+
+    const STORAGE_KEY = "organic_chem_game_v12_fixed_master";
+
+    function loadSavedData() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (Array.isArray(data.discovered)) {
+            discoveredCompounds = new Set(data.discovered);
+            INITIAL_DISCOVERED.forEach(id => discoveredCompounds.add(id));
+          }
+        }
+      } catch(e) {
+        console.error(e);
+      }
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          discovered: Array.from(discoveredCompounds)
+        }));
+      } catch(e) {
+        console.error(e);
+      }
+    }
+
+    function updateCurrentView() {
+      const c = COMPOUNDS[currentCompoundId];
+      if (!c) return;
+
+      document.getElementById("compoundName").textContent = c.name;
+      document.getElementById("compoundFormula").textContent = c.formula;
+      document.getElementById("compoundDesc").textContent = c.desc;
+      document.getElementById("compoundSvg").innerHTML = makeCompoundSvg(c.id);
+
+      const totalCount = Object.keys(COMPOUNDS).length;
+      document.getElementById("discoveredCount").textContent = discoveredCompounds.size;
+      document.getElementById("totalCompounds").textContent = totalCount;
+
+      updateTargetMission();
+      renderReagents();
+    }
+
+    function updateTargetMission() {
+      const priorityTargets = [
+        "acetaldehyde", "acetic_acid", "ethyl_acetate", "diethyl_ether",
+        "ethylene", "propylene", "2_propanol", "acetone", "iodoform",
+        "formaldehyde", "formic_acid",
+        "toluene", "maleic_acid", "maleic_anhydride",
+        "ethylbenzene", "styrene", "benzyl_alcohol", "benzaldehyde", "benzoic_acid",
+        "phthalic_acid", "phthalic_anhydride", "pet", "nitrobenzene", "aniline", "phenol"
+      ];
+
+      let nextTarget = priorityTargets.find(id => !discoveredCompounds.has(id));
+      if (!nextTarget) {
+        const remaining = Object.keys(COMPOUNDS).find(id => !discoveredCompounds.has(id));
+        nextTarget = remaining;
+      }
+
+      const targetEl = document.getElementById("targetCompoundName");
+      if (nextTarget && COMPOUNDS[nextTarget]) {
+        currentTargetId = nextTarget;
+        targetEl.textContent = `${COMPOUNDS[nextTarget].name} を作ろう`;
+      } else {
+        currentTargetId = null;
+        targetEl.textContent = `全61種 完全制覇達成！🎉`;
+      }
+    }
+
+    function renderReagents() {
+      const grid = document.getElementById("reagentsGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      const filtered = REAGENTS.filter(r => r.cat === currentCategory);
+
+      filtered.forEach(reagent => {
+        const btn = document.createElement("button");
+        btn.className = "reagent-btn";
+
+        if (isAssistMode) {
+          const canReact = TRANSITIONS.some(t => t.from === currentCompoundId && t.reagent === reagent.id);
+          if (canReact) {
+            btn.classList.add("assist-active");
+          }
+        }
+
+        btn.innerHTML = `
+          <span class="reagent-name">${reagent.name}</span>
+          <span class="reagent-detail">${reagent.detail}</span>
+        `;
+        btn.onclick = () => applyReagent(reagent.id);
+        grid.appendChild(btn);
+      });
+    }
+
+    function switchCategory(cat, btnEl) {
+      currentCategory = cat;
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      renderReagents();
+    }
+
+    function toggleAssistMode() {
+      const toggle = document.getElementById("assistToggle");
+      isAssistMode = toggle.checked;
+      document.getElementById("assistStatusText").textContent = isAssistMode ? "アシスト: ON (ハイライト表示)" : "アシスト: OFF";
+      renderReagents();
+    }
+
+    /* ========================================================
+       6. 反応処理
+       ======================================================== */
+    function scrollToBench() {
+      const bench = document.getElementById("currentBenchCard");
+      if (bench) {
+        bench.scrollIntoView({ behavior: "smooth", block: "start" });
+        bench.classList.add("reacted");
+        setTimeout(() => bench.classList.remove("reacted"), 800);
+      }
+    }
+
+    function applyReagent(reagentId) {
+      const logContainer = document.getElementById("logContainer");
+      const rInfo = REAGENTS.find(r => r.id === reagentId);
+      const match = TRANSITIONS.find(t => t.from === currentCompoundId && t.reagent === reagentId);
+
+      scrollToBench();
+
+      if (match) {
+        if (match.isomers) {
+          match.isomers.forEach(id => {
+            if (COMPOUNDS[id]) discoveredCompounds.add(id);
+          });
+          saveData();
+          logContainer.innerHTML = `
+            <div class="log-line log-success">【異性体同時生成】 ${match.log}</div>
+            <div class="log-line log-info">o-キシレン、m-キシレン、p-キシレン の<b>全3種を図鑑に登録</b>しました！</div>
+          `;
+          logContainer.scrollTop = 0;
+          showToast("✨ キシレン3異性体を図鑑に一括登録しました！");
+          openIsomerModal();
+          return;
+        }
+
+        const prevName = COMPOUNDS[currentCompoundId].name;
+        currentCompoundId = match.to;
+        const newCompound = COMPOUNDS[currentCompoundId];
+
+        const isNew = !discoveredCompounds.has(newCompound.id);
+        discoveredCompounds.add(newCompound.id);
+        saveData();
+
+        logContainer.innerHTML = `
+          <div class="log-line log-success">【反応成功】 ${match.log}</div>
+          <div class="log-line log-info">${prevName} ➔ <b>${newCompound.name}</b> に変化しました。</div>
+        `;
+        logContainer.scrollTop = 0;
+
+        if (isNew) {
+          showToast(`✨ 新発見！「${newCompound.name}」を図鑑に登録しました`);
+        }
+
+        updateCurrentView();
+      } else {
+        const cName = COMPOUNDS[currentCompoundId].name;
+        logContainer.innerHTML = `
+          <div class="log-line log-fail">【反応なし】 ${cName} に「${rInfo.name}」を加えても変化しませんでした。</div>
+          <div class="log-line log-info">別の試薬を試すか、目標ヒント💡を確認してみましょう。</div>
+        `;
+        logContainer.scrollTop = 0;
+      }
+    }
+
+    function openIsomerModal() {
+      const container = document.getElementById("isomerChoiceContainer");
+      container.innerHTML = `
+        <button class="isomer-choice-btn" onclick="chooseIsomer('o_xylene')">
+          <div style="width:46px;height:46px;flex-shrink:0;">${makeCompoundSvg('o_xylene')}</div>
+          <div class="isomer-btn-title">o-キシレン</div>
+        </button>
+        <button class="isomer-choice-btn" onclick="chooseIsomer('m_xylene')">
+          <div style="width:46px;height:46px;flex-shrink:0;">${makeCompoundSvg('m_xylene')}</div>
+          <div class="isomer-btn-title">m-キシレン</div>
+        </button>
+        <button class="isomer-choice-btn" onclick="chooseIsomer('p_xylene')">
+          <div style="width:46px;height:46px;flex-shrink:0;">${makeCompoundSvg('p_xylene')}</div>
+          <div class="isomer-btn-title">p-キシレン</div>
+        </button>
+      `;
+      document.getElementById("isomerModal").classList.add("open");
+    }
+
+    function chooseIsomer(isomerId) {
+      document.getElementById("isomerModal").classList.remove("open");
+      currentCompoundId = isomerId;
+      updateCurrentView();
+      const logContainer = document.getElementById("logContainer");
+      logContainer.innerHTML = `
+        <div class="log-line log-info">実験台に <b>${COMPOUNDS[isomerId].name}</b> をセットしました。次の反応を試してみましょう！</div>
+      `;
+      logContainer.scrollTop = 0;
+      scrollToBench();
+    }
+
+    function loadStartingMaterial(id) {
+      if (!COMPOUNDS[id]) return;
+      currentCompoundId = id;
+      const logContainer = document.getElementById("logContainer");
+      logContainer.innerHTML = `
+        <div class="log-line log-info">実験台を洗浄し、新たに「<b>${COMPOUNDS[id].name}</b>」を用意しました。</div>
+      `;
+      logContainer.scrollTop = 0;
+      updateCurrentView();
+      scrollToBench();
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => {
+        t.classList.remove("show");
+      }, 2500);
+    }
+
+    /* ========================================================
+       7. 目標ヒントモーダル
+       ======================================================== */
+    function openTaskHintModal() {
+      if (!currentTargetId || !COMPOUNDS[currentTargetId]) {
+        alert("おめでとうございます！全化合物を完全制覇しました！");
+        return;
+      }
+      const target = COMPOUNDS[currentTargetId];
+      document.getElementById("hintModalTitle").innerHTML = `💡 目標: <span style="color:var(--accent);">${target.name}</span> の生成ヒント`;
+
+      const body = document.getElementById("hintModalBody");
+      body.innerHTML = `
+        <div class="info-block">
+          <div class="info-block-title">📌 示性式 / 分子式</div>
+          <div class="info-block-content">
+            <span style="font-family:monospace; font-size:1rem; color:var(--accent); font-weight:700;">${target.formula}</span>
+            <span style="font-size:0.75rem; color:var(--text-sub); margin-left:8px;">(${target.group === 'aromatic' ? '芳香族' : '脂肪族'})</span>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-title">⚗️ 合成ルート・生成手順</div>
+          <div class="info-block-content" style="color:#38bdf8; font-weight:600;">
+            ${target.recipe}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("hintModal").classList.add("open");
+    }
+
+    function closeTaskHintModal() {
+      document.getElementById("hintModal").classList.remove("open");
+    }
+
+    /* ========================================================
+       8. 実験台化合物 詳細解説モーダル
+       ======================================================== */
+    function openCurrentDetailModal() {
+      const c = COMPOUNDS[currentCompoundId];
+      if (!c) return;
+      document.getElementById("detailModalTitle").innerHTML = `🔍 実験台: <span style="color:var(--accent);">${c.name}</span> の解説`;
+
+      const body = document.getElementById("detailModalBody");
+      body.innerHTML = `
+        <div class="info-block">
+          <div class="info-block-title">📌 基本情報</div>
+          <div class="info-block-content">
+            <b>示性式:</b> <span style="font-family:monospace; color:var(--accent);">${c.formula}</span><br>
+            <b>分類:</b> ${c.group === 'aromatic' ? '芳香族化合物' : '脂肪族化合物'}<br>
+            <b>概要:</b> ${c.desc}
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-title">⚗️ 主な生成方法</div>
+          <div class="info-block-content" style="color:#38bdf8; font-weight:600;">
+            ${c.recipe}
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-block-title">🧪 性質・検出反応・入試重要ポイント</div>
+          <div class="info-block-content">
+            ${c.tests}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("detailModal").classList.add("open");
+    }
+
+    function closeCurrentDetailModal() {
+      document.getElementById("detailModal").classList.remove("open");
+    }
+
+    /* ========================================================
+       9. 図鑑操作
+       ======================================================== */
+    function setBookFilter(filter, btnEl) {
+      currentBookFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      renderBookList();
+    }
+
+    function openBookModal() {
+      renderBookList();
+      document.getElementById("bookModal").classList.add("open");
+    }
+
+    function renderBookList() {
+      const list = document.getElementById("bookList");
+      if (!list) return;
+      list.innerHTML = "";
+
+      let items = Object.values(COMPOUNDS);
+      if (currentBookFilter === "aromatic") {
+        items = items.filter(c => c.group === "aromatic");
+      } else if (currentBookFilter === "aliphatic") {
+        items = items.filter(c => c.group === "aliphatic");
+      }
+
+      const totalDiscovered = discoveredCompounds.size;
+      const totalAll = Object.keys(COMPOUNDS).length;
+      const percent = Math.round((totalDiscovered / totalAll) * 100);
+
+      document.getElementById("bookStatsDiscovered").textContent = totalDiscovered;
+      document.getElementById("bookStatsTotal").textContent = totalAll;
+      document.getElementById("bookProgressPercent").textContent = `${percent}% 達成`;
+
+      items.forEach(c => {
+        const isDiscovered = discoveredCompounds.has(c.id);
+        const item = document.createElement("div");
+        item.className = `book-item ${isDiscovered ? "discovered" : "undiscovered"}`;
+
+        if (isDiscovered) {
+          item.innerHTML = `
+            <div class="book-item-svg">${makeCompoundSvg(c.id)}</div>
+            <div class="book-item-name">${c.name}</div>
+          `;
+          item.onclick = () => {
+            currentCompoundId = c.id;
+            updateCurrentView();
+            closeBookModal();
+            const logContainer = document.getElementById("logContainer");
+            logContainer.innerHTML = `
+              <div class="log-line log-info">図鑑から <b>${c.name}</b> を実験台にセットしました。</div>
+            `;
+            logContainer.scrollTop = 0;
+            scrollToBench();
+          };
+        } else {
+          item.innerHTML = `
+            <div class="book-item-svg" style="display:flex;align-items:center;justify-content:center;color:#64748b;font-size:1.4rem;">?</div>
+            <div class="book-item-name" style="color:#64748b;">未発見</div>
+          `;
+        }
+        list.appendChild(item);
+      });
+    }
+
+    function closeBookModal() {
+      document.getElementById("bookModal").classList.remove("open");
+    }
+
+    function confirmResetBook() {
+      const ok = confirm("【警告】図鑑の記録をすべて初期化しますか？\n（初期原料のみの状態に戻り、最初からやり直せます）");
+      if (ok) {
+        discoveredCompounds = new Set(INITIAL_DISCOVERED);
+        currentCompoundId = "benzene";
+        saveData();
+        closeBookModal();
+        updateCurrentView();
+        const logContainer = document.getElementById("logContainer");
+        logContainer.innerHTML = `
+          <div class="log-line log-fail">図鑑データを初期化しました。最初から再スタートしましょう！</div>
+        `;
+        logContainer.scrollTop = 0;
+        showToast("図鑑をリセットしました");
+        scrollToBench();
+      }
+    }
+
+    // DOM読み込み完了時に確実に初期化
+    window.addEventListener("DOMContentLoaded", () => {
+      loadSavedData();
+      updateCurrentView();
+    });
+  </script>
+</body>
+</html>
