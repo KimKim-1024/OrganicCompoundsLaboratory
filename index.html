@@ -36,11 +36,11 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      padding-bottom: 28px;
+      padding-bottom: 30px;
     }
 
     header {
-      background: rgba(30, 41, 59, 0.9);
+      background: rgba(30, 41, 59, 0.95);
       backdrop-filter: blur(8px);
       position: sticky;
       top: 0;
@@ -119,7 +119,7 @@
     /* 目標カード */
     .task-card {
       background: linear-gradient(135deg, #1e293b, #0f172a);
-      border: 1px solid #38bdf844;
+      border: 1px solid #38bdf855;
       border-radius: 12px;
       padding: 10px 14px;
       display: flex;
@@ -605,16 +605,14 @@
   </header>
 
   <main>
-    <!-- 目標ミッション -->
-    <div class="task-card">
+    <div class="task-card" id="taskCardAnchor">
       <div class="task-left">
         <span class="task-label">Target Mission</span>
-        <span class="task-target" id="targetCompoundName">エタノール を作ろう</span>
+        <span class="task-target" id="targetCompoundName">プロピレン を作ろう</span>
       </div>
       <button class="task-hint-btn" onclick="openTaskHintModal()">ヒント💡</button>
     </div>
 
-    <!-- 実験台カード -->
     <div class="current-card" id="currentBenchCard">
       <div class="current-status-row">
         <span class="current-status-tag">実験台の化合物</span>
@@ -628,7 +626,7 @@
       </div>
     </div>
 
-    <!-- 原料用意パネル -->
+    <!-- 2段式 原料パネル（プロパンを追加） -->
     <div class="start-materials-box">
       <div class="box-label">
         <span>原料物質を用意する (実験台を初期化)</span>
@@ -639,23 +637,21 @@
         <button class="btn btn-mat" onclick="loadStartingMaterial('acetylene')">≡ アセチレン</button>
       </div>
       <div class="action-row">
-        <button class="btn btn-mat" onclick="loadStartingMaterial('methane')">CH₄ メタン</button>
+        <button class="btn btn-mat" onclick="loadStartingMaterial('propane')">C₃H₈ プロパン</button>
         <button class="btn btn-mat" onclick="loadStartingMaterial('methanol')">CH₃OH メタノール</button>
         <button class="btn btn-mat" onclick="loadStartingMaterial('ethanol')">C₂H₅OH エタノール</button>
       </div>
       <div class="action-row" style="margin-top:2px;">
         <button class="btn btn-book" onclick="openBookModal()">
-          図鑑を開く (<span id="discoveredCount">6</span>/<span id="totalCompounds">60</span>)
+          図鑑を開く (<span id="discoveredCount">7</span>/<span id="totalCompounds">61</span>)
         </button>
       </div>
     </div>
 
-    <!-- 反応ログ -->
     <div class="log-container" id="logContainer">
       <div class="log-line log-info">試薬を選択して反応を開始してください。</div>
     </div>
 
-    <!-- 反応試薬 -->
     <div class="reagents-section" id="reagentsSection">
       <div class="reagents-header">
         <span>反応試薬を選択</span>
@@ -686,8 +682,8 @@
         <button class="filter-btn" onclick="setBookFilter('aliphatic', this)">脂肪族</button>
       </div>
       <div class="book-stats">
-        <span>登録数: <b id="bookStatsDiscovered" style="color:var(--accent);">6</b> / <span id="bookStatsTotal">60</span></span>
-        <span id="bookProgressPercent">10% 達成</span>
+        <span>登録数: <b id="bookStatsDiscovered" style="color:var(--accent);">7</b> / <span id="bookStatsTotal">61</span></span>
+        <span id="bookProgressPercent">11% 達成</span>
       </div>
       <div class="book-list" id="bookList"></div>
       <div class="modal-footer">
@@ -753,9 +749,7 @@
       const base = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">`;
       const end = `</svg>`;
       switch(type) {
-        case "benzene":
-          return `${base}${SVG_CORE}${end}`;
-
+        case "benzene": return `${base}${SVG_CORE}${end}`;
         case "naphthalene":
           return `${base}
             <polygon points="39.2,36 60,48 60,72 39.2,84 18.4,72 18.4,48" stroke="#38bdf8" stroke-width="2.3" fill="none"/>
@@ -763,7 +757,6 @@
             <circle cx="39.2" cy="60" r="13" stroke="#38bdf8" stroke-width="1.8" fill="none"/>
             <circle cx="80.8" cy="60" r="13" stroke="#38bdf8" stroke-width="1.8" fill="none"/>
           ${end}`;
-
         case "acetylene":
           return `${base}
             <text x="20" y="60" fill="#fff" font-size="10" font-weight="bold" dominant-baseline="central">H</text>
@@ -776,7 +769,6 @@
             <line x1="82" y1="60" x2="92" y2="60" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="100" y="60" fill="#fff" font-size="10" font-weight="bold" dominant-baseline="central">H</text>
           ${end}`;
-
         case "ethylene":
           return `${base}
             <line x1="52" y1="58" x2="68" y2="58" stroke="#38bdf8" stroke-width="2.2"/>
@@ -784,29 +776,22 @@
             <text x="36" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">H₂C</text>
             <text x="84" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">CH₂</text>
           ${end}`;
-
         case "ethane":
           return `${base}
             <line x1="48" y1="60" x2="72" y2="60" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="32" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">H₃C</text>
             <text x="88" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">CH₃</text>
           ${end}`;
-
         case "methane":
           return `${base}
             <circle cx="60" cy="60" r="14" stroke="#38bdf8" stroke-width="2" fill="none"/>
             <text x="60" y="60" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle" dominant-baseline="central">CH₄</text>
           ${end}`;
-
         case "propane":
           return `${base}
-            <text x="25" y="60" fill="#fff" font-size="8.5" font-weight="bold" dominant-baseline="central">CH₃</text>
-            <line x1="42" y1="60" x2="52" y2="60" stroke="#38bdf8" stroke-width="2"/>
-            <text x="60" y="60" fill="#fff" font-size="8.5" font-weight="bold" dominant-baseline="central">CH₂</text>
-            <line x1="72" y1="60" x2="82" y2="60" stroke="#38bdf8" stroke-width="2"/>
-            <text x="95" y="60" fill="#fff" font-size="8.5" font-weight="bold" dominant-baseline="central">CH₃</text>
+            <text x="60" y="52" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">CH₃-CH₂-CH₃</text>
+            <text x="60" y="74" fill="#94a3b8" font-size="7.5" text-anchor="middle">プロパン</text>
           ${end}`;
-
         case "propylene":
           return `${base}
             <text x="25" y="60" fill="#fff" font-size="9" font-weight="bold" dominant-baseline="central">CH₃</text>
@@ -816,35 +801,30 @@
             <line x1="72" y1="62" x2="84" y2="62" stroke="#38bdf8" stroke-width="2"/>
             <text x="96" y="60" fill="#fff" font-size="9" font-weight="bold" dominant-baseline="central">CH₂</text>
           ${end}`;
-
         case "methanol":
           return `${base}
             <line x1="48" y1="60" x2="70" y2="60" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="34" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">H₃C</text>
             <text x="82" y="60" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">OH</text>
           ${end}`;
-
         case "ethanol":
           return `${base}
             <text x="30" y="60" fill="#fff" font-size="9.5" font-weight="bold" dominant-baseline="central">CH₃CH₂</text>
             <line x1="68" y1="60" x2="80" y2="60" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="92" y="60" fill="#34d399" font-size="10" font-weight="bold" dominant-baseline="central">OH</text>
           ${end}`;
-
         case "acetaldehyde":
           return `${base}
             <text x="32" y="60" fill="#fff" font-size="10" font-weight="bold" dominant-baseline="central">H₃C</text>
             <line x1="52" y1="60" x2="68" y2="60" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="82" y="60" fill="#38bdf8" font-size="10" font-weight="bold" dominant-baseline="central">CHO</text>
           ${end}`;
-
         case "acetic_acid":
           return `${base}
             <text x="30" y="60" fill="#fff" font-size="10" font-weight="bold" dominant-baseline="central">H₃C</text>
             <line x1="52" y1="60" x2="66" y2="60" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="84" y="60" fill="#38bdf8" font-size="9.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "formaldehyde":
           return `${base}
             <line x1="58" y1="52" x2="58" y2="38" stroke="#38bdf8" stroke-width="2"/>
@@ -856,26 +836,22 @@
             <line x1="68" y1="65" x2="78" y2="76" stroke="#38bdf8" stroke-width="2"/>
             <text x="82" y="82" fill="#fff" font-size="9" font-weight="bold">H</text>
           ${end}`;
-
         case "formic_acid":
           return `${base}
             <text x="35" y="60" fill="#fff" font-size="10" font-weight="bold" dominant-baseline="central">H</text>
             <line x1="48" y1="60" x2="60" y2="60" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="78" y="60" fill="#38bdf8" font-size="9.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "ethyl_acetate":
           return `${base}
             <text x="60" y="48" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">CH₃-COO-CH₂CH₃</text>
             <text x="60" y="72" fill="#34d399" font-size="8" text-anchor="middle">エステル結合</text>
           ${end}`;
-
         case "diethyl_ether":
           return `${base}
             <text x="60" y="52" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">C₂H₅ - O - C₂H₅</text>
             <text x="60" y="74" fill="#a78bfa" font-size="7.5" text-anchor="middle">エーテル結合</text>
           ${end}`;
-
         case "ethylene_glycol":
           return `${base}
             <text x="24" y="60" fill="#34d399" font-size="8.5" font-weight="bold" dominant-baseline="central">HO</text>
@@ -884,7 +860,6 @@
             <line x1="76" y1="60" x2="84" y2="60" stroke="#38bdf8" stroke-width="2"/>
             <text x="94" y="60" fill="#34d399" font-size="8.5" font-weight="bold" dominant-baseline="central">OH</text>
           ${end}`;
-
         case "ethylene_oxide":
           return `${base}
             <polygon points="60,40 40,75 80,75" stroke="#38bdf8" stroke-width="2.2" fill="none"/>
@@ -892,45 +867,38 @@
             <text x="32" y="86" fill="#fff" font-size="7">H₂C</text>
             <text x="76" y="86" fill="#fff" font-size="7">CH₂</text>
           ${end}`;
-
         case "acetone":
           return `${base}
             <text x="60" y="44" fill="#f43f5e" font-size="9" font-weight="bold" text-anchor="middle">=O</text>
             <line x1="60" y1="48" x2="60" y2="58" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="66" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">CH₃-C-CH₃</text>
           ${end}`;
-
         case "2_propanol":
           return `${base}
             <text x="60" y="42" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">OH</text>
             <line x1="60" y1="46" x2="60" y2="56" stroke="#38bdf8" stroke-width="2"/>
             <text x="60" y="66" fill="#fff" font-size="8.5" font-weight="bold" text-anchor="middle">CH₃-CH-CH₃</text>
           ${end}`;
-
         case "1_propanol":
           return `${base}
             <text x="60" y="58" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">CH₃CH₂CH₂-OH</text>
           ${end}`;
-
         case "vinyl_chloride":
           return `${base}
             <text x="35" y="60" fill="#fff" font-size="9" font-weight="bold" dominant-baseline="central">H₂C=CH</text>
             <line x1="72" y1="60" x2="82" y2="60" stroke="#38bdf8" stroke-width="2"/>
             <text x="90" y="60" fill="#34d399" font-size="9.5" font-weight="bold" dominant-baseline="central">Cl</text>
           ${end}`;
-
         case "vinyl_acetate":
           return `${base}
             <text x="60" y="50" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">CH₂=CH-OCOCH₃</text>
             <text x="60" y="72" fill="#38bdf8" font-size="7.5" text-anchor="middle">酢酸ビニル</text>
           ${end}`;
-
         case "polyvinyl_alcohol":
           return `${base}
             <text x="60" y="50" fill="#34d399" font-size="8" font-weight="bold" text-anchor="middle">[-CH₂-CH(OH)-]ₙ</text>
             <text x="60" y="72" fill="#94a3b8" font-size="7.5" text-anchor="middle">ポリビニルアルコール</text>
           ${end}`;
-
         case "chloromethane":
           return `${base}<text x="60" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">CH₃Cl</text>${end}`;
         case "dichloromethane":
@@ -941,7 +909,6 @@
           return `${base}<text x="60" y="60" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">CCl₄</text>${end}`;
         case "iodoform":
           return `${base}<text x="60" y="60" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central">CHI₃ (黄)</text>${end}`;
-
         case "maleic_acid":
           return `${base}
             <line x1="50" y1="42" x2="50" y2="78" stroke="#38bdf8" stroke-width="3"/>
@@ -955,7 +922,6 @@
             <line x1="50" y1="78" x2="68" y2="90" stroke="#38bdf8" stroke-width="2"/>
             <text x="88" y="93" fill="#38bdf8" font-size="8.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "maleic_anhydride":
           return `${base}
             <line x1="42" y1="48" x2="42" y2="72" stroke="#38bdf8" stroke-width="3"/>
@@ -973,48 +939,40 @@
             <text x="28" y="46" fill="#fff" font-size="7.5" font-weight="bold">H</text>
             <text x="28" y="76" fill="#fff" font-size="7.5" font-weight="bold">H</text>
           ${end}`;
-
         case "styrene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fff" font-size="8" text-anchor="middle" font-family="sans-serif" font-weight="bold" dominant-baseline="central">HC=CH₂</text>
           ${end}`;
-
         case "toluene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="23" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fff" font-size="9" text-anchor="middle" font-family="sans-serif" font-weight="bold" dominant-baseline="central">CH₃</text>
           ${end}`;
-
         case "chlorobenzene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#34d399" font-size="10" text-anchor="middle" font-weight="bold" dominant-baseline="central">Cl</text>
           ${end}`;
-
         case "nitrobenzene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fb7185" font-size="9" text-anchor="middle" font-weight="bold" dominant-baseline="central">NO₂</text>
           ${end}`;
-
         case "benzenesulfonic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fbbf24" font-size="8.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">SO₃H</text>
           ${end}`;
-
         case "cumene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fff" font-size="7.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">CH(CH₃)₂</text>
           ${end}`;
-
         case "cyclohexane":
           return `${base}
             <polygon points="60,35 86,50 86,78 60,93 34,78 34,50" stroke="#94a3b8" stroke-width="3" fill="none"/>
           ${end}`;
-
         case "bhc":
           return `${base}
             <polygon points="60,38 82,51 82,75 60,88 38,75 38,51" stroke="#94a3b8" stroke-width="2.5" fill="none"/>
@@ -1025,25 +983,21 @@
             <text x="14" y="75" fill="#34d399" font-size="8.5" font-weight="bold" dominant-baseline="central">Cl</text>
             <text x="14" y="51" fill="#34d399" font-size="8.5" font-weight="bold" dominant-baseline="central">Cl</text>
           ${end}`;
-
         case "cumene_hydroperoxide":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="14" fill="#fff" font-size="6.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">C(CH₃)₂OOH</text>
           ${end}`;
-
         case "sodium_phenoxide":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#a78bfa" font-size="9" text-anchor="middle" font-weight="bold" dominant-baseline="central">ONa</text>
           ${end}`;
-
         case "phenol":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#34d399" font-size="9.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">OH</text>
           ${end}`;
-
         case "tribromophenol":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1055,7 +1009,6 @@
             <line x1="39" y1="48" x2="28" y2="42" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="18" y="40" fill="#f59e0b" font-size="8.5" font-weight="bold" dominant-baseline="central">Br</text>
           ${end}`;
-
         case "picric_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1064,7 +1017,6 @@
             <text x="60" y="102" fill="#fb7185" font-size="7.5" font-weight="bold" text-anchor="middle" dominant-baseline="central">NO₂</text>
             <text x="8" y="46" fill="#fb7185" font-size="7.5" font-weight="bold" dominant-baseline="central">O₂N</text>
           ${end}`;
-
         case "sodium_salicylate":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1072,7 +1024,6 @@
             <line x1="81" y1="48" x2="90" y2="43" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="93" y="41" fill="#a78bfa" font-size="7" font-weight="bold" dominant-baseline="central">COONa</text>
           ${end}`;
-
         case "salicylic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1080,7 +1031,6 @@
             <line x1="81" y1="48" x2="90" y2="43" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="93" y="41" fill="#38bdf8" font-size="7.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "acetylsalicylic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1088,7 +1038,6 @@
             <line x1="81" y1="48" x2="90" y2="43" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="93" y="41" fill="#38bdf8" font-size="7.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "methyl_salicylate":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1096,31 +1045,26 @@
             <line x1="81" y1="48" x2="90" y2="43" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="92" y="41" fill="#38bdf8" font-size="6.5" font-weight="bold" dominant-baseline="central">COOCH₃</text>
           ${end}`;
-
         case "aniline_hydrochloride":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#a78bfa" font-size="8.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">NH₃Cl</text>
           ${end}`;
-
         case "aniline":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#34d399" font-size="9" text-anchor="middle" font-weight="bold" dominant-baseline="central">NH₂</text>
           ${end}`;
-
         case "acetanilide":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="14" fill="#38bdf8" font-size="6.8" text-anchor="middle" font-weight="bold" dominant-baseline="central">NHCOCH₃</text>
           ${end}`;
-
         case "benzene_diazonium_chloride":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fb7185" font-size="8" text-anchor="middle" font-weight="bold" dominant-baseline="central">N₂⁺Cl⁻</text>
           ${end}`;
-
         case "p_hydroxyazobenzene":
           return `${base}
             <polygon points="10,60 17,47.9 31,47.9 38,60 31,72.1 17,72.1" stroke="#38bdf8" stroke-width="2.2" fill="none"/>
@@ -1133,7 +1077,6 @@
             <line x1="98" y1="60" x2="105" y2="60" stroke="#38bdf8" stroke-width="2"/>
             <text x="113" y="60" fill="#34d399" font-size="8.5" font-weight="bold" text-anchor="middle" dominant-baseline="central">OH</text>
           ${end}`;
-
         case "tnt":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1142,7 +1085,6 @@
             <text x="60" y="102" fill="#fb7185" font-size="7.5" font-weight="bold" text-anchor="middle" dominant-baseline="central">NO₂</text>
             <text x="8" y="46" fill="#fb7185" font-size="7.5" font-weight="bold" dominant-baseline="central">O₂N</text>
           ${end}`;
-
         case "o_xylene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1150,7 +1092,6 @@
             <line x1="81" y1="48" x2="91" y2="43" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="95" y="40" fill="#fff" font-size="8" font-weight="bold" dominant-baseline="central">CH₃</text>
           ${end}`;
-
         case "m_xylene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1158,7 +1099,6 @@
             <line x1="81" y1="72" x2="91" y2="78" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="95" y="81" fill="#fff" font-size="8" font-weight="bold" dominant-baseline="central">CH₃</text>
           ${end}`;
-
         case "p_xylene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1166,7 +1106,6 @@
             <line x1="60" y1="84" x2="60" y2="96" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="105" fill="#fff" font-size="8.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">CH₃</text>
           ${end}`;
-
         case "phthalic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1174,7 +1113,6 @@
             <line x1="81" y1="48" x2="90" y2="43" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="93" y="41" fill="#38bdf8" font-size="7.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "phthalic_anhydride":
           return `${base}${SVG_CORE}
             <line x1="81" y1="48" x2="94" y2="48" stroke="#38bdf8" stroke-width="2.2"/>
@@ -1185,10 +1123,9 @@
             <line x1="94" y1="48" x2="99" y2="38" stroke="#f43f5e" stroke-width="2"/>
             <line x1="94" y1="72" x2="99" y2="82" stroke="#f43f5e" stroke-width="2"/>
             <text x="103" y="36" fill="#f43f5e" font-size="7" font-weight="bold" dominant-baseline="central">O</text>
-            <text x="103" y="84" fill="#f43f5e" font-size="7.5" font-weight="bold" dominant-baseline="central">O</text>
+            <text x="103" y="84" fill="#f43f5e" font-size="7" font-weight="bold" dominant-baseline="central">O</text>
             <text x="110" y="60" fill="#f43f5e" font-size="7.5" font-weight="bold" dominant-baseline="central">O</text>
           ${end}`;
-
         case "isophthalic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1196,7 +1133,6 @@
             <line x1="81" y1="72" x2="90" y2="78" stroke="#38bdf8" stroke-width="2.2"/>
             <text x="93" y="81" fill="#38bdf8" font-size="7.5" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "terephthalic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
@@ -1204,7 +1140,6 @@
             <line x1="60" y1="84" x2="60" y2="96" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="105" fill="#38bdf8" font-size="8" text-anchor="middle" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
         case "pet":
           return `${base}
             <text x="6" y="55" fill="#94a3b8" font-size="18" font-weight="bold" dominant-baseline="central">[</text>
@@ -1218,52 +1153,45 @@
             <text x="89" y="55" fill="#34d399" font-size="5.2" font-weight="bold" text-anchor="middle" dominant-baseline="central">-COOCH₂CH₂O-</text>
             <text x="60" y="90" fill="#38bdf8" font-size="7.5" text-anchor="middle" font-weight="bold">ポリエチレンテレフタラート</text>
           ${end}`;
-
         case "ethylbenzene":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#fff" font-size="8" text-anchor="middle" font-weight="bold" dominant-baseline="central">CH₂CH₃</text>
           ${end}`;
-
         case "benzyl_alcohol":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#34d399" font-size="8" text-anchor="middle" font-weight="bold" dominant-baseline="central">CH₂OH</text>
           ${end}`;
-
         case "benzaldehyde":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#38bdf8" font-size="8.5" text-anchor="middle" font-weight="bold" dominant-baseline="central">CHO</text>
           ${end}`;
-
         case "benzoic_acid":
           return `${base}${SVG_CORE}
             <line x1="60" y1="36" x2="60" y2="24" stroke="#38bdf8" stroke-width="2.5"/>
             <text x="60" y="15" fill="#38bdf8" font-size="8" text-anchor="middle" font-weight="bold" dominant-baseline="central">COOH</text>
           ${end}`;
-
-        default:
-          return `${base}${SVG_CORE}${end}`;
+        default: return `${base}${SVG_CORE}${end}`;
       }
     }
 
     /* ========================================================
-       2. 化合物データベース定義（完全一意・全61種）
+       2. 化合物データベース定義 (全61種)
        ======================================================== */
     const COMPOUNDS = {
-      // --- 芳香族 (34種) ---
       benzene: {
         id: "benzene", name: "ベンゼン", formula: "C₆H₆", group: "aromatic",
         desc: "最も基本的な芳香族炭化水素。正六角形平面構造で置換反応が起きやすい。",
         recipe: "アセチレンを『赤熱鉄管触媒 (三分子重合)』に通すか、上部原料ボタンから呼び出します。",
-        tests: "臭素水を加えても常温暗所では付加せず脱色しない（置換優先）。燃焼させると多量のすすを出して燃える。"
+        tests: "臭素水を加えても常温暗所では付加せず脱色しない。燃焼させると多量のすすを出して激しく燃える。"
       },
       naphthalene: {
         id: "naphthalene", name: "ナフタレン", formula: "C₁₀H₈", group: "aromatic",
         desc: "ベンゼン環が2個縮合した炭化水素。酸化開裂でフタル酸を生じる。",
         recipe: "上部原料ボタンの『↺ ナフタレン』を押して実験台に用意します。",
-        tests: "特有の臭気を持つ白色結晶で、昇華性を示す。V₂O₅触媒で高温空気酸化するとフタル酸を経て無水フタル酸を与える。"
+        tests: "特有の臭気を持つ白色結晶で昇華性を示す。V₂O₅触媒で高温空気酸化するとフタル酸を経て無水フタル酸を与える。"
       },
       toluene: {
         id: "toluene", name: "トルエン", formula: "C₆H₅CH₃", group: "aromatic",
@@ -1275,19 +1203,19 @@
         id: "chlorobenzene", name: "クロロベンゼン", formula: "C₆H₅Cl", group: "aromatic",
         desc: "ベンゼンに鉄触媒下で塩素を置換。高温高圧でNaOHと反応してフェノキシドへ。",
         recipe: "ベンゼン に『Cl₂ + Fe (光遮断)』を作用させて親電子置換させます。",
-        tests: "通常のハロゲン化アルキルと異なり、芳香環に直結した塩素は強固で、硝酸銀水溶液を加えても常温では塩化銀の沈殿を生じない。"
+        tests: "芳香環に直結した塩素原子は脱離しにくく、硝酸銀水溶液を加えても常温では沈殿を生じない。"
       },
       bhc: {
         id: "bhc", name: "ベンゼンヘキサクロリド (BHC)", formula: "C₆H₆Cl₆", group: "aromatic",
         desc: "光照射下で塩素を付加させた飽和環状有機塩素化合物。",
         recipe: "ベンゼン に『Cl₂ + 光 (紫外線)』を照射してラジカル付加させます。",
-        tests: "ベンゼンの二重結合が完全に消失した飽和脂環式化合物。六塩化シクロヘキサン。"
+        tests: "二重結合が完全に消失した飽和脂環式化合物。かつての殺虫剤。"
       },
       nitrobenzene: {
         id: "nitrobenzene", name: "ニトロベンゼン", formula: "C₆H₅NO₂", group: "aromatic",
         desc: "混酸によりニトロ化された淡黄色の油状液体。還元するとアニリンへ。",
         recipe: "ベンゼン に『混酸 (濃HNO₃+濃H₂SO₄)』を加えて50〜60℃で加熱します。",
-        tests: "苦扁桃油（アーモンド様）の香気を持つ水より重い黄色油状液体。スズと塩酸で還元するとアニリン塩酸塩を生じる。"
+        tests: "アーモンド様の香気を持つ水より重い黄色油状液体。スズと塩酸で還元するとアニリン塩酸塩を生じる。"
       },
       benzenesulfonic_acid: {
         id: "benzenesulfonic_acid", name: "ベンゼンスルホン酸", formula: "C₆H₅SO₃H", group: "aromatic",
@@ -1305,7 +1233,7 @@
         id: "cyclohexane", name: "シクロヘキサン", formula: "C₆H₁₂", group: "aromatic",
         desc: "ニッケル触媒下でベンゼンに水素を高圧付加させた飽和炭化水素。",
         recipe: "ベンゼン に『H₂ + Ni触媒』を高圧下で付加させます。",
-        tests: "正六角形の平面ではなく、立体的な「いす形」配座をとる飽和脂環式炭化水素。"
+        tests: "平面ではなく立体的な「いす形」配座をとる飽和脂環式炭化水素。"
       },
       ethylbenzene: {
         id: "ethylbenzene", name: "エチルベンゼン", formula: "C₆H₅CH₂CH₃", group: "aromatic",
@@ -1317,31 +1245,31 @@
         id: "styrene", name: "スチレン", formula: "C₆H₅CH=CH₂", group: "aromatic",
         desc: "エチルベンゼンを脱水素して得られるビニル化合物。ポリスチレン原料。",
         recipe: "エチルベンゼン に『高温触媒脱水素 (-H₂)』を作用させます。",
-        tests: "側鎖にビニル基を持つため、臭素水を滴下すると瞬時に脱色する（付加反応）。容易に付加重合してポリスチレンになる。"
+        tests: "側鎖に炭素間二重結合（ビニル基）を持つため、臭素水を滴下すると速やかに脱色する。容易に付加重合する。"
       },
       benzyl_alcohol: {
         id: "benzyl_alcohol", name: "ベンジルアルコール", formula: "C₆H₅CH₂OH", group: "aromatic",
         desc: "第一級芳香族アルコール。穏やかに酸化するとベンズアルデヒドになる。",
         recipe: "トルエン に『Cl₂ + 光 (側鎖塩素化)』を作用させて加水分解します。",
-        tests: "芳香族アルコールでありフェノール類ではないため、塩化鉄(III)水溶液を加えても紫色に呈色しない。"
+        tests: "フェノール類ではないため塩化鉄(III)水溶液を加えても呈色しない。穏やかな酸化でアルデヒドを生じる。"
       },
       benzaldehyde: {
         id: "benzaldehyde", name: "ベンズアルデヒド", formula: "C₆H₅CHO", group: "aromatic",
         desc: "アーモンドの香気を持つ芳香族アルデヒド。還元性があり、酸化で安息香酸へ。",
-        recipe: "ベンジルアルコール を『穏やかな酸化 (CuO等)』で一段階酸化します。",
-        tests: "還元性を示し、アンモニア性硝酸銀水溶液を加温すると銀鏡反応陽性。空気酸化されやすく安息香酸になりやすい。"
+        recipe: "ベンジルアルコール を『穏やかな酸化 (CuO等)』で酸化します。",
+        tests: "還元性を示し、アンモニア性硝酸銀水溶液を加えると銀鏡反応を示す。フェーリング液の還元性は弱い。"
       },
       benzoic_acid: {
         id: "benzoic_acid", name: "安息香酸", formula: "C₆H₅COOH", group: "aromatic",
         desc: "トルエンや側鎖アルキル基を酸化して得られる代表的芳香族カルボン酸。",
         recipe: "トルエン、エチルベンゼン、またはベンズアルデヒド に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "昇華性をもつ白色針状結晶。NaHCO₃水溶液に加えると中和してCO₂の気泡を激しく発生する。"
+        tests: "昇華性をもつ白色結晶。NaHCO₃水溶液に加えると中和してCO₂を発泡する。"
       },
       o_xylene: {
         id: "o_xylene", name: "o-キシレン", formula: "C₆H₄(CH₃)₂", group: "aromatic",
         desc: "オルト異性体。酸化するとフタル酸（加熱で脱水して無水フタル酸）になる。",
         recipe: "トルエン に『CH₃Cl + AlCl₃』を作用させるとキシレン3異性体が同時生成します。",
-        tests: "KMnO₄で酸化するとフタル酸を生じ、これを加熱すると分子内脱水して無水フタル酸を与える（オルト体特有）。"
+        tests: "KMnO₄で酸化するとフタル酸を生じ、これを加熱脱水すると無水フタル酸を与える。"
       },
       m_xylene: {
         id: "m_xylene", name: "m-キシレン", formula: "C₆H₄(CH₃)₂", group: "aromatic",
@@ -1353,31 +1281,31 @@
         id: "p_xylene", name: "p-キシレン", formula: "C₆H₄(CH₃)₂", group: "aromatic",
         desc: "パラ異性体。酸化するとテレフタル酸（PET合成原料）になる。",
         recipe: "トルエンのアルキル化で生成後、図鑑または選択画面からセットします。",
-        tests: "KMnO₄で加熱酸化するとテレフタル酸を生じる。ポリエステルの極めて重要な原料。"
+        tests: "KMnO₄で加熱酸化するとテレフタル酸を生じる。PET合成の重要原料。"
       },
       phthalic_acid: {
         id: "phthalic_acid", name: "フタル酸", formula: "C₆H₄(COOH)₂", group: "aromatic",
         desc: "o-キシレンやナフタレンを酸化して得られるジカルボン酸。加熱脱水で酸無水物へ。",
         recipe: "o-キシレン を『KMnO₄』で酸化、またはナフタレン を『V₂O₅酸化』します。",
-        tests: "2つのカルボキシ基が隣接（オルト位）しているため、加熱すると容易に分子内脱水して無水フタル酸を生じる。"
+        tests: "2つのカルボキシ基がオルト位に隣接するため、加熱すると容易に脱水して無水フタル酸を生じる。"
       },
       phthalic_anhydride: {
         id: "phthalic_anhydride", name: "無水フタル酸", formula: "C₆H₄(CO)₂O", group: "aromatic",
         desc: "フタル酸を加熱脱水して得られる環状酸無水物。",
         recipe: "フタル酸 に『加熱脱水 (-H₂O)』を行います。",
-        tests: "水を加えて加熱すると開環水和してフタル酸に戻る。アルコールと反応してエステルを作る。"
+        tests: "水を加えて加熱すると開環水和してフタル酸に戻る。"
       },
       isophthalic_acid: {
         id: "isophthalic_acid", name: "イソフタル酸", formula: "C₆H₄(COOH)₂", group: "aromatic",
         desc: "m-キシレンを酸化して得られるメタ位ジカルボン酸。",
         recipe: "m-キシレン に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "カルボキシ基が離れているため、加熱しても分子内脱水による酸無水物を形成しない。"
+        tests: "メタ位のジカルボン酸。加熱しても分子内脱水による環状酸無水物は作らない。"
       },
       terephthalic_acid: {
         id: "terephthalic_acid", name: "テレフタル酸", formula: "C₆H₄(COOH)₂", group: "aromatic",
         desc: "p-キシレンを酸化して得られる結晶。エチレングリコールと縮合重合してPETに。",
         recipe: "p-キシレン に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "水や多くの有機溶媒に極めて溶けにくい高融点の白色粉末。エチレングリコールと重合してPET樹脂になる。"
+        tests: "溶媒に溶けにくい高融点の白色粉末。エチレングリコールと重合してPETになる。"
       },
       cumene_hydroperoxide: {
         id: "cumene_hydroperoxide", name: "クメンヒドロペルオキシド", formula: "C₆H₅C(CH₃)₂OOH", group: "aromatic",
@@ -1389,55 +1317,55 @@
         id: "sodium_phenoxide", name: "ナトリウムフェノキシド", formula: "C₆H₅ONa", group: "aromatic",
         desc: "弱酸の塩。二酸化炭素や塩酸を通じることでフェノールが遊離する。",
         recipe: "ベンゼンスルホン酸 に『NaOH融解』、またはフェノールに『NaOH水溶液』を加えます。",
-        tests: "水溶液にCO₂（炭酸）を通じると、炭酸より弱い酸であるフェノールが遊離して白濁する（弱酸の遊離）。"
+        tests: "水溶液にCO₂（炭酸）を通じると、フェノールが遊離して白濁する（弱酸の遊離）。"
       },
       phenol: {
         id: "phenol", name: "フェノール", formula: "C₆H₅OH", group: "aromatic",
         desc: "弱酸性の芳香族。塩化鉄(III)で紫色に呈色し、臭素水で白色沈殿を生じる。",
         recipe: "ナトリウムフェノキシド に『CO₂ + H₂O』、またはクメンヒドロペルオキシドを『希H₂SO₄酸分解』します。",
-        tests: "①塩化鉄(III)水溶液を加えると紫色に呈色。②臭素水を滴下すると2,4,6-トリブロモフェノールの白色沈殿。③弱酸性だが炭酸より弱いためNaHCO₃とは反応しない。"
+        tests: "①塩化鉄(III)で紫色呈色。②臭素水で2,4,6-トリブロモフェノールの白色沈殿。③弱酸性だが炭酸より弱いためNaHCO₃とは反応しない。"
       },
       aniline_hydrochloride: {
         id: "aniline_hydrochloride", name: "アニリン塩酸塩", formula: "C₆H₅NH₃Cl", group: "aromatic",
         desc: "弱塩基の塩。水酸化ナトリウムを加えると弱塩基の遊離によりアニリンが遊離。",
         recipe: "ニトロベンゼン に『Sn + HCl (還元)』を作用させます。",
-        tests: "強塩基（NaOH水溶液）を加えると、弱塩基の遊離により水に難溶な油状のアニリンが遊離する。"
+        tests: "強塩基（NaOH水溶液）を加えると、弱塩基の遊離により水に難溶なアニリンが分離する。"
       },
       aniline: {
         id: "aniline", name: "アニリン", formula: "C₆H₅NH₂", group: "aromatic",
         desc: "代表的な芳香族第一級アミン。弱塩基性。無水酢酸でアセチル化されてアセトアニリドへ。",
         recipe: "アニリン塩酸塩 に『NaOH 水溶液』を加えて弱塩基を遊離させます。",
-        tests: "①さらし粉水溶液を加えると赤紫色に呈色。②二クロム酸カリウムで酸化するとアニリンブラックを生じる。③氷冷下でジアゾ化する。"
+        tests: "①さらし粉水溶液で赤紫色に呈色。②二クロム酸カリウムで酸化するとアニリンブラックを生じる。③氷冷下でジアゾ化する。"
       },
       acetanilide: {
         id: "acetanilide", name: "アセトアニリド", formula: "C₆H₅NHCOCH₃", group: "aromatic",
         desc: "アニリンのアセチル化で得られるアミド結合を持つ中性結晶（解熱鎮痛剤）。",
         recipe: "アニリン に『無水酢酸』を加えて加熱アセチル化します。",
-        tests: "アミド結合（-NHCO-）を持つため中性を示し、塩酸にもNaOHにも溶けにくい無色板状結晶。"
+        tests: "アミド結合を持つ中性物質で、希酸にも希塩基にも溶けにくい白色板状結晶。"
       },
       benzene_diazonium_chloride: {
         id: "benzene_diazonium_chloride", name: "塩化ベンゼンジアゾニウム", formula: "C₆H₅N₂⁺Cl⁻", group: "aromatic",
         desc: "氷冷下(5℃以下)でジアゾ化して得られる不安定塩。温水で分解してフェノールへ。",
         recipe: "アニリン に『NaNO₂ + HCl (氷冷5℃以下)』を作用させます。",
-        tests: "熱に極めて不安定で、温めると窒素ガスを放出してフェノールに加水分解。塩基性下でカップリングして橙赤色染料を作る。"
+        tests: "熱に不安定で水溶液を温めると窒素を放出してフェノールになる。塩基性でフェノール類とカップリングする。"
       },
       p_hydroxyazobenzene: {
         id: "p_hydroxyazobenzene", name: "p-ヒドロキシアゾベンゼン", formula: "C₆H₅-N=N-C₆H₄OH", group: "aromatic",
         desc: "ジアゾニウム塩とナトリウムフェノキシドのカップリング反応で生じる橙赤色アゾ染料。",
         recipe: "塩化ベンゼンジアゾニウム に『ナトリウムフェノキシド (塩基性)』を加えます。",
-        tests: "アゾ基（-N=N-）を持つ鮮やかな橙赤色の結晶（アゾ染料）。"
+        tests: "アゾ基（-N=N-）を持つ鮮やかな橙赤色の色素。"
       },
       tribromophenol: {
         id: "tribromophenol", name: "2,4,6-トリブロモフェノール", formula: "C₆H₂Br₃OH", group: "aromatic",
         desc: "フェノール水溶液に臭素水を加えると生じる白色沈殿（2,4,6位にBrが結合）。",
         recipe: "フェノール に『臭素水 (Br₂ aq)』を加えます。",
-        tests: "フェノールの強いオルト・パラ配向性により、臭素水を通じるだけで瞬時に生成する白色沈殿。"
+        tests: "フェノールに臭素水を加えるだけで触媒なしに瞬時に生じる特有の白色沈殿。"
       },
       picric_acid: {
         id: "picric_acid", name: "2,4,6-トリニトロフェノール (ピクリン酸)", formula: "C₆H₂(NO₂)₃OH", group: "aromatic",
         desc: "フェノールを濃硝酸・濃硫酸で強烈にニトロ化した黄色結晶の強酸。",
         recipe: "フェノール に『混酸 (濃HNO₃+濃H₂SO₄)』を加えて加熱します。",
-        tests: "3つのニトロ基により無機酸並みの強酸性を示す黄色針状結晶。かつて爆薬として使用された。"
+        tests: "ニトロ基の電子求引性により無機酸に匹敵する強酸性を示す黄色結晶。かつての火薬。"
       },
       sodium_salicylate: {
         id: "sodium_salicylate", name: "サリチル酸ナトリウム", formula: "C₆H₄(OH)COONa", group: "aromatic",
@@ -1449,28 +1377,58 @@
         id: "salicylic_acid", name: "サリチル酸", formula: "C₆H₄(OH)COOH", group: "aromatic",
         desc: "フェノール性とカルボン酸の両方の性質を持つ二官能性化合物。",
         recipe: "サリチル酸ナトリウム に『HCl 希塩酸』を加えて弱酸を遊離させます。",
-        tests: "①塩化鉄(III)で赤紫色に呈色（フェノール性OH）。②NaHCO₃水溶液で気泡CO₂を発生（カルボキシ基）。"
+        tests: "①塩化鉄(III)で赤紫色呈色。②NaHCO₃水溶液で気泡CO₂を発生。③メタノールとエステル化、無水酢酸とアセチル化の両方が可能。"
       },
       acetylsalicylic_acid: {
         id: "acetylsalicylic_acid", name: "アセチルサリチル酸 (アスピリン)", formula: "C₆H₄(OCOCH₃)COOH", group: "aromatic",
         desc: "サリチル酸のOH基をアセチル化。酸性を示す代表的解熱鎮痛消炎剤。",
         recipe: "サリチル酸 に『無水酢酸』を加えてアセチル化します。",
-        tests: "フェノール性OH基がエステル化されているため、塩化鉄(III)を加えても呈色しない（サリチル酸との区別点）。"
+        tests: "フェノール性OH基が保護されているため塩化鉄(III)を加えても呈色しない（サリチル酸との区別点）。NaHCO₃水溶液には発泡して溶ける。"
       },
       methyl_salicylate: {
         id: "methyl_salicylate", name: "サリチル酸メチル", formula: "C₆H₄(OH)COOCH₃", group: "aromatic",
         desc: "サリチル酸のCOOH基をエステル化。特有の香気（湿布薬の匂い）を持つ。",
         recipe: "サリチル酸 に『CH₃OH + 濃H₂SO₄』を加えて加熱エステル化します。",
-        tests: "フェノール性OH基が残っているため、塩化鉄(III)水溶液を加えると紫色に呈色する。湿布薬特有の香気を持つ。"
+        tests: "フェノール性OH基が残っているため塩化鉄(III)水溶液で紫色に呈色する。湿布薬特有の強い芳香。"
       },
       tnt: {
         id: "tnt", name: "2,4,6-トリニトロトルエン (TNT)", formula: "C₆H₂(CH₃)(NO₂)₃", group: "aromatic",
         desc: "トルエンを段階的に激しくニトロ化して得られる強力な軍用爆薬。",
         recipe: "トルエン に『混酸』を加えて高温で徹底的にニトロ化します。",
-        tests: "淡黄色結晶で衝撃に対して比較的安定な軍用火薬。"
+        tests: "衝撃に対して比較的安定な淡黄色結晶の軍用爆薬。"
       },
 
       // --- 脂肪族 (27種) ---
+      propane: {
+        id: "propane", name: "プロパン", formula: "C₃H₈", group: "aliphatic",
+        desc: "炭素数3のアルカン。LPガスの主成分。脱水素によりプロピレンを与える。",
+        recipe: "上部原料ボタンの『C₃H₈ プロパン』を押して実験台に用意します。",
+        tests: "常温常圧で無色の気体。臭素水とは暗所・常温で反応しない。高温脱水素によりプロピレンになる。"
+      },
+      propylene: {
+        id: "propylene", name: "プロピレン (プロペン)", formula: "C₃H₆", group: "aliphatic",
+        desc: "炭素数3のアルケン。水和するとマルコフニコフ則に従い主に2-プロパノールになる。",
+        recipe: "プロパン に『高温触媒脱水素 (-H₂)』を作用させるか、2-プロパノールに『濃H₂SO₄ (170℃ 加熱)』を作用させて脱水します。",
+        tests: "臭素水を瞬時に脱色する。酸触媒下で水を付加するとマルコフニコフ則により2-プロパノールが主生成物となる。"
+      },
+      "2_propanol": {
+        id: "2_propanol", name: "2-プロパノール (イソプロパノール)", formula: "CH₃CH(OH)CH₃", group: "aliphatic",
+        desc: "第二級アルコール。酸化するとアセトンになる。ヨードホルム反応陽性。",
+        recipe: "プロピレン に『H₂O + 希H₂SO₄ (酸触媒水和)』を作用させるか、アセトンを『H₂ + Ni触媒』で還元します。",
+        tests: "CH₃CH(OH)- 構造をもつためヨードホルム反応陽性。酸化するとアセトンを生じる。"
+      },
+      acetone: {
+        id: "acetone", name: "アセトン", formula: "CH₃COCH₃", group: "aliphatic",
+        desc: "2-プロパノールの酸化やクメン法で生じる代表的ケトン。ヨードホルム反応陽性。",
+        recipe: "2-プロパノール に『穏やかな酸化 (CuO等)』を作用させるか、クメンヒドロペルオキシドを酸分解します。",
+        tests: "ヨードホルム反応陽性（黄色特異臭沈殿）。ケトンのため銀鏡反応・フェーリング反応は陰性。"
+      },
+      "1_propanol": {
+        id: "1_propanol", name: "1-プロパノール", formula: "CH₃CH₂CH₂OH", group: "aliphatic",
+        desc: "第一級アルコール。酸化するとプロピオンアルデヒド、さらにプロピオン酸になる。",
+        recipe: "濃硫酸と170℃で加熱脱水するとプロピレンを生じる。",
+        tests: "第一級アルコールのためヨードホルム反応は陰性。"
+      },
       acetylene: {
         id: "acetylene", name: "アセチレン", formula: "C₂H₂", group: "aliphatic",
         desc: "最も単純なアルキン。炭素間三重結合を持ち、付加反応や三分子重合でベンゼンを与える。",
@@ -1480,8 +1438,8 @@
       ethylene: {
         id: "ethylene", name: "エチレン", formula: "C₂H₄", group: "aliphatic",
         desc: "最も単純なアルケン。エタノールの濃硫酸脱水(170℃)や付加重合でポリエチレンになる。",
-        recipe: "エタノール に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させるか、アセチレンを水素添加します。",
-        tests: "臭素水（赤褐色）を通じると付加反応により速やかに脱色する。"
+        recipe: "エタノール に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させるか、アセチレンを接触還元します。",
+        tests: "臭素水を通じると付加反応により速やかに赤褐色が脱色する。"
       },
       ethane: {
         id: "ethane", name: "エタン", formula: "C₂H₆", group: "aliphatic",
@@ -1493,19 +1451,7 @@
         id: "methane", name: "メタン", formula: "CH₄", group: "aliphatic",
         desc: "最も単純なアルカン。天然ガスの主成分。光照射下で塩素と段階的置換反応を起こす。",
         recipe: "上部原料ボタンの『CH₄ メタン』を押して実験台に用意します。",
-        tests: "無色無臭の気体で極めて安定。光照射下で塩素と混合すると段階的にラジカル置換反応を起こす。"
-      },
-      propane: {
-        id: "propane", name: "プロパン", formula: "C₃H₈", group: "aliphatic",
-        desc: "炭素数3のアルカン。プロピレンに水素付加して得られる飽和炭化水素。",
-        recipe: "プロピレン に『H₂ + Ni触媒』を作用させて水素添加します。",
-        tests: "LPガスの主成分。不飽和結合を持たないため臭素水を脱色しない。"
-      },
-      propylene: {
-        id: "propylene", name: "プロピレン (プロペン)", formula: "C₃H₆", group: "aliphatic",
-        desc: "炭素数3のアルケン。水和するとマルコフニコフ則に従い主に2-プロパノールになる。",
-        recipe: "2-プロパノール または 1-プロパノール に『濃H₂SO₄ (170℃ 加熱)』を作用させて分子内脱水させます。",
-        tests: "臭素水を瞬時に脱色する。酸触媒下で水を付加すると、マルコフニコフ則により2-プロパノールが主生成物として得られる。"
+        tests: "極めて安定な無色無臭気体。光照射下で塩素と段階的置換反応を起こす。"
       },
       methanol: {
         id: "methanol", name: "メタノール", formula: "CH₃OH", group: "aliphatic",
@@ -1523,67 +1469,49 @@
         id: "formaldehyde", name: "ホルムアルデヒド", formula: "HCHO", group: "aliphatic",
         desc: "メタノールの酸化生成物。37%水溶液はホルマリン。強い刺激臭と還元性を持つ。",
         recipe: "メタノール に『穏やかな酸化 (CuO等)』を作用させます。",
-        tests: "強い還元性を持ち、銀鏡反応・フェーリング反応ともに陽性。フェノールや尿素と付加縮合する。"
+        tests: "刺激臭気体。強い還元性を持ち、銀鏡反応・フェーリング反応ともに陽性。"
       },
       formic_acid: {
         id: "formic_acid", name: "ギ酸", formula: "HCOOH", group: "aliphatic",
         desc: "分子内にカルボキシ基とアルデヒド基の両方を持ち、カルボン酸でありながら還元性を示す。",
         recipe: "メタノール または ホルムアルデヒド に『KMnO₄』を作用させて酸化します。",
-        tests: "カルボン酸でありながらアルデヒド基を併せ持つため、銀鏡反応やフェーリング反応を示す。"
+        tests: "カルボン酸でありながらアルデヒド基（-CHO）を併せ持つため銀鏡反応やフェーリング反応を示し、濃硫酸と加熱するとCOを発生して分解する。"
       },
       acetaldehyde: {
         id: "acetaldehyde", name: "アセトアルデヒド", formula: "CH₃CHO", group: "aliphatic",
         desc: "エタノールの酸化やアセチレンへの水付加で生成。銀鏡反応やフェーリング反応を示す。",
         recipe: "エタノール を『穏やかな酸化』するか、アセチレンに『H₂O + HgSO₄』を作用させます。",
-        tests: "①銀鏡反応・フェーリング反応陽性。②CH₃CO- 構造を持つためヨードホルム反応陽性。"
+        tests: "銀鏡反応・フェーリング反応陽性。CH₃CO- 構造を持つためヨードホルム反応も陽性。"
       },
       acetic_acid: {
         id: "acetic_acid", name: "酢酸", formula: "CH₃COOH", group: "aliphatic",
         desc: "食酢の主成分。弱酸性。加熱脱水で無水酢酸を生じる。",
         recipe: "エタノール または アセトアルデヒド に『KMnO₄ (加熱酸化)』を作用させます。",
-        tests: "刺激臭をもつ酸性液体。NaHCO₃に加えると発泡してCO₂を発生する。"
+        tests: "刺激臭をもつ酸性液体。純度が高いものは冬季に凝固して氷酢酸となる。"
       },
       ethyl_acetate: {
         id: "ethyl_acetate", name: "酢酸エチル", formula: "CH₃COOC₂H₅", group: "aliphatic",
         desc: "酢酸とエタノールを濃硫酸触媒で脱水縮合して得られる果実臭の芳香性エステル。",
         recipe: "酢酸 に『C₂H₅OH + 濃H₂SO₄』を加えて加熱エステル化します。",
-        tests: "果実臭を持つ中性液体。NaOH水溶液を加えて加熱するとけん化されて水和する。"
+        tests: "果実臭をもつ中性液体。NaOH水溶液と加熱するとけん化されて均一に溶ける。"
       },
       diethyl_ether: {
         id: "diethyl_ether", name: "ジエチルエーテル", formula: "C₂H₅OC₂H₅", group: "aliphatic",
         desc: "エタノールに濃硫酸を加えて約130℃に加熱すると分子間脱水により生成する揮発性液体。",
         recipe: "エタノール に『濃H₂SO₄ (130℃ 加熱)』を作用させます。",
-        tests: "揮発性と引火性が極めて高い中性液体。ナトリウム金属を加えても水素を発生しない。"
+        tests: "極めて引火しやすい揮発性液体。ナトリウム金属を加えても水素を発生しない。"
       },
       ethylene_glycol: {
         id: "ethylene_glycol", name: "エチレングリコール", formula: "C₂H₄(OH)₂", group: "aliphatic",
         desc: "2価アルコール。不凍液やテレフタル酸との縮合重合によるPET合成原料。",
         recipe: "エチレンオキシド に『H₂O + 加熱』を作用させて開環水和させます。",
-        tests: "甘みと粘性のある2価アルコール。テレフタル酸と加熱縮合重合してPETを生成する。"
+        tests: "粘性のある2価アルコール。テレフタル酸と加熱縮合重合してPETを生成する。"
       },
       ethylene_oxide: {
         id: "ethylene_oxide", name: "エチレンオキシド", formula: "C₂H₄O", group: "aliphatic",
         desc: "エチレンを銀触媒で酸化して得られる三員環エーテル。水和でエチレングリコールへ。",
         recipe: "エチレン に『O₂ (空気酸化)』を作用させます。",
-        tests: "反応性に富む三員環エポキシド。酸触媒下で水と容易に開環反応してエチレングリコールを与える。"
-      },
-      acetone: {
-        id: "acetone", name: "アセトン", formula: "CH₃COCH₃", group: "aliphatic",
-        desc: "2-プロパノールの酸化やクメン法で生じる代表的ケトン。ヨードホルム反応陽性。",
-        recipe: "2-プロパノール に『穏やかな酸化 (CuO等)』を作用させるか、クメンヒドロペルオキシドを酸分解します。",
-        tests: "①CH₃CO- 構造を持つためヨードホルム反応陽性。②ケトンのため銀鏡反応・フェーリング反応は陰性。"
-      },
-      "2_propanol": {
-        id: "2_propanol", name: "2-プロパノール (イソプロパノール)", formula: "CH₃CH(OH)CH₃", group: "aliphatic",
-        desc: "第二級アルコール。酸化するとアセトンになる。ヨードホルム反応陽性。",
-        recipe: "プロピレン に『H₂O + 希H₂SO₄ (酸触媒水和)』を作用させます（マルコフニコフ則）。",
-        tests: "①CH₃CH(OH)- 構造をもつためヨードホルム反応陽性。②酸化すると還元性をもたないアセトンになる。"
-      },
-      "1_propanol": {
-        id: "1_propanol", name: "1-プロパノール", formula: "CH₃CH₂CH₂OH", group: "aliphatic",
-        desc: "第一級アルコール。酸化するとプロピオンアルデヒド、さらにプロピオン酸になる。",
-        recipe: "図鑑から呼び出すか、プロピレン関連生成物としてセットします。",
-        tests: "第一級アルコールのためヨードホルム反応は陰性。濃硫酸と170℃加熱脱水するとプロピレンを生じる。"
+        tests: "反応性に富む三員環化合物。水と容易に開環反応してエチレングリコールを与える。"
       },
       vinyl_chloride: {
         id: "vinyl_chloride", name: "塩化ビニル", formula: "CH₂=CHCl", group: "aliphatic",
@@ -1595,13 +1523,13 @@
         id: "vinyl_acetate", name: "酢酸ビニル", formula: "CH₂=CHOCOCH₃", group: "aliphatic",
         desc: "アセチレンに酢酸を付加して得られるエステル。付加重合でポリ酢酸ビニルへ。",
         recipe: "アセチレン に『CH₃COOH (酸付加)』を作用させます。",
-        tests: "付加重合してポリ酢酸ビニルになり、これをNaOHでけん化するとポリビニルアルコールを生じる。"
+        tests: "付加重合してポリ酢酸ビニルになり、これをけん化するとPVAを生じる。"
       },
       polyvinyl_alcohol: {
         id: "polyvinyl_alcohol", name: "ポリビニルアルコール (PVA)", formula: "[-CH₂CH(OH)-]ₙ", group: "aliphatic",
         desc: "ポリ酢酸ビニルをけん化して得られる水溶性高分子。ホルムアルデヒド処理でビニロンに。",
         recipe: "酢酸ビニル に『NaOH 水溶液 (けん化)』を作用させます。",
-        tests: "多数の親水性ヒドロキシ基を持つため水溶性。ホルムアルデヒドでアセタール化処理するとビニロンになる。"
+        tests: "親水性OH基を多く持つため水溶性。ホルムアルデヒドでアセタール化処理するとビニロンになる。"
       },
       chloromethane: {
         id: "chloromethane", name: "クロロメタン", formula: "CH₃Cl", group: "aliphatic",
@@ -1619,7 +1547,7 @@
         id: "chloroform", name: "クロロホルム", formula: "CHCl₃", group: "aliphatic",
         desc: "メタンの塩素化で生成する麻酔性溶媒。",
         recipe: "ジクロロメタン に『Cl₂ + 光 (紫外線)』を作用させます。",
-        tests: "特有の甘い芳香をもつ重い揮発性液体。光と空気で有毒なホスゲンに分解しやすい。"
+        tests: "甘い芳香をもつ重い液体。光と空気で有毒なホスゲンCOCl₂になりやすいため褐色瓶に保存する。"
       },
       carbon_tetrachloride: {
         id: "carbon_tetrachloride", name: "四塩化炭素", formula: "CCl₄", group: "aliphatic",
@@ -1631,25 +1559,25 @@
         id: "iodoform", name: "ヨードホルム", formula: "CHI₃", group: "aliphatic",
         desc: "アセトンやエタノールにヨウ素とNaOHを作用させると生じる特異臭のある黄色沈殿。",
         recipe: "エタノール、アセトアルデヒド、2-プロパノール、またはアセトン に『I₂ + NaOH 水溶液』を加えます。",
-        tests: "消毒薬特有の臭気を持つ鮮やかな黄色結晶。CH₃CO- または CH₃CH(OH)- 構造の検出に不可欠。"
+        tests: "特有の薬品臭を持つ黄色結晶。アセチル基または1-ヒドロキシエチル基の検出に用いる。"
       },
       maleic_acid: {
         id: "maleic_acid", name: "マレイン酸", formula: "C₄H₄O₄", group: "aliphatic",
         desc: "ベンゼンを酸化バナジウム触媒で高温空気酸化して得られるシス形ジカルボン酸。",
         recipe: "ベンゼン に『V₂O₅触媒 + 高温空気酸化』を作用させて酸化開裂させます。",
-        tests: "シス異性体。2つのカルボキシ基が空間的に近いため、加熱すると容易に脱水して無水マレイン酸になる（トランス形フマル酸との相違点）。"
+        tests: "シス異性体。2つのカルボキシ基が空間的に近いため、加熱すると容易に分子内脱水して無水マレイン酸になる。"
       },
       maleic_anhydride: {
         id: "maleic_anhydride", name: "無水マレイン酸", formula: "C₄H₂O₃", group: "aliphatic",
         desc: "マレイン酸を加熱脱水して得られる環状酸無水物。水和でマレイン酸に戻る。",
         recipe: "マレイン酸 に『加熱脱水 (-H₂O)』を行います。",
-        tests: "水を加えて温めると速やかに水和開環してマレイン酸に戻る。"
+        tests: "水を加えて温めると速やかに開環水和してマレイン酸に戻る。"
       },
       pet: {
         id: "pet", name: "ポリエチレンテレフタラート (PET)", formula: "[-COC₆H₄COOCH₂CH₂O-]ₙ", group: "aliphatic",
         desc: "テレフタル酸とエチレングリコールがエステル結合で縮合重合した合成ポリエステル樹脂。",
         recipe: "テレフタル酸 に『エチレングリコール』を加えて脱水縮合重合させます。",
-        tests: "耐熱性・透明性・耐薬品性に優れた代表的ポリエステル繊維・ペットボトル材料。"
+        tests: "耐熱性・透明性・耐薬品性に優れた合成ポリエステル樹脂。"
       }
     };
 
@@ -1670,7 +1598,7 @@
 
       { id: "kmno4", name: "KMnO₄ (加熱酸化)", cat: "ox_red", detail: "強酸化 (側鎖・アルコール)" },
       { id: "v2o5_ox", name: "V₂O₅触媒 + 高温空気酸化", cat: "ox_red", detail: "環の酸化開裂 (マレイン酸/フタル酸)" },
-      { id: "dehydrogenation", name: "高温触媒脱水素 (-H₂)", cat: "ox_red", detail: "脱水素 (スチレン合成)" },
+      { id: "dehydrogenation", name: "高温触媒脱水素 (-H₂)", cat: "ox_red", detail: "脱水素 (プロピレン/スチレン)" },
       { id: "mild_ox", name: "穏やかな酸化 (CuO等)", cat: "ox_red", detail: "第1級/第2級アルコール酸化" },
       { id: "o2_air", name: "O₂ (空気酸化)", cat: "ox_red", detail: "クメン・エチレン酸化" },
       { id: "sn_hcl", name: "Sn + HCl (還元)", cat: "ox_red", detail: "ニトロ基の還元" },
@@ -1703,6 +1631,16 @@
        4. 反応遷移ルール
        ======================================================== */
     const TRANSITIONS = [
+      // === プロパン・プロピレン・プロパノール系 ===
+      { from: "propane", reagent: "dehydrogenation", to: "propylene", log: "プロパンを高温触媒下で脱水素(-H₂)し、プロピレン(プロペン)が生成しました！" },
+      { from: "propylene", reagent: "h2_ni", to: "propane", log: "接触水素添加により二重結合が還元され、プロパンが生成しました。" },
+      { from: "propylene", reagent: "h2o_h2so4", to: "2_propanol", log: "マルコフニコフ則に従い、水素の多い炭素にHが付加して主に2-プロパノールが生成しました！" },
+      { from: "2_propanol", reagent: "h2so4_170", to: "propylene", log: "2-プロパノールに濃硫酸を加え170℃で加熱脱水し、プロピレンが生成しました！" },
+      { from: "1_propanol", reagent: "h2so4_170", to: "propylene", log: "1-プロパノールに濃硫酸を加え170℃で加熱脱水し、プロピレンが生成しました！" },
+      { from: "2_propanol", reagent: "mild_ox", to: "acetone", log: "第二級アルコールが酸化され、アセトンが生成しました。" },
+      { from: "acetone", reagent: "h2_ni", to: "2_propanol", log: "アセトンを接触還元(H₂+Ni)し、2-プロパノールが生成しました！" },
+      { from: "acetone", reagent: "i2_naoh", to: "iodoform", log: "CH₃COCH₃ がヨードホルム反応を起こし、黄色沈殿のヨードホルム(CHI₃)が生じました！" },
+
       // === アセチレン系 ===
       { from: "acetylene", reagent: "polymerize_trimer", to: "benzene", log: "アセチレン3分子が赤熱した鉄管内で環化三分子重合し、ベンゼンが生成しました！(脂肪族➔芳香族)" },
       { from: "acetylene", reagent: "h2_ni", to: "ethylene", log: "接触水素添加により三重結合が部分還元され、エチレンが生成しました。" },
@@ -1739,15 +1677,6 @@
       { from: "chloromethane", reagent: "cl2_light", to: "dichloromethane", log: "さらに塩素が置換し、ジクロロメタンが生成しました。" },
       { from: "dichloromethane", reagent: "cl2_light", to: "chloroform", log: "さらに塩素が置換し、クロロホルムが生成しました。" },
       { from: "chloroform", reagent: "cl2_light", to: "carbon_tetrachloride", log: "すべての水素が置換され、四塩化炭素が生成しました。" },
-
-      // === プロピレン合成＆プロパノール・アセトン系 ===
-      { from: "2_propanol", reagent: "h2so4_170", to: "propylene", log: "2-プロパノールに濃硫酸を加え170℃で加熱脱水し、プロピレン(プロペン)が生成しました！" },
-      { from: "1_propanol", reagent: "h2so4_170", to: "propylene", log: "1-プロパノールに濃硫酸を加え170℃で加熱脱水し、プロピレンが生成しました！" },
-      { from: "propylene", reagent: "h2o_h2so4", to: "2_propanol", log: "マルコフニコフ則に従い、水素の多い炭素にHが付加して主に2-プロパノールが生成しました！" },
-      { from: "propylene", reagent: "h2_ni", to: "propane", log: "接触水素添加により二重結合が還元され、プロパンが生成しました。" },
-      { from: "propane", reagent: "dehydrogenation", to: "propylene", log: "高温触媒下で脱水素(-H₂)し、プロピレンが生成しました。" },
-      { from: "2_propanol", reagent: "mild_ox", to: "acetone", log: "第二級アルコールが酸化され、アセトンが生成しました。" },
-      { from: "acetone", reagent: "i2_naoh", to: "iodoform", log: "CH₃COCH₃ がヨードホルム反応を起こし、黄色沈殿のヨードホルム(CHI₃)が生じました！" },
 
       // === ベンゼン・マレイン酸開裂系 ===
       { from: "benzene", reagent: "cl2_fe", to: "chlorobenzene", log: "ベンゼンに鉄触媒で塩素を通じ、クロロベンゼンが生成しました。(置換反応)" },
@@ -1820,18 +1749,90 @@
     ];
 
     /* ========================================================
-       5. 状態管理
+       5. 状態管理＆厳密な1本道ミッション配列
        ======================================================== */
     let currentCompoundId = "benzene";
     let isAssistMode = false;
     let currentCategory = "sub_add";
     let currentBookFilter = "all";
 
-    const INITIAL_DISCOVERED = ["benzene", "naphthalene", "acetylene", "methane", "methanol", "ethanol"];
+    // 初期解放原料：プロパンを追加（全7種）
+    const INITIAL_DISCOVERED = ["benzene", "naphthalene", "acetylene", "propane", "methane", "methanol", "ethanol"];
     let discoveredCompounds = new Set(INITIAL_DISCOVERED);
-    let currentTargetId = "acetaldehyde";
+    let currentTargetId = "propylene";
 
-    const STORAGE_KEY = "organic_chem_game_v12_fixed_master";
+    // プレイヤーが詰まらないよう、初期原料から順序通りに作れる完全一本道ミッション配列
+    const STRICT_MISSION_ORDER = [
+      // Step 1: 初期原料から1ステップで作れる基本物質
+      "propylene",          // プロパン ➔ 脱水素
+      "acetaldehyde",       // エタノール ➔ 穏やかな酸化 (またはアセチレン水和)
+      "ethylene",           // エタノール ➔ 170℃脱水 (またはアセチレン還元)
+      "chloromethane",      // メタン ➔ 塩素化
+      "formaldehyde",       // メタノール ➔ 穏やかな酸化
+      "toluene",            // ベンゼン ➔ メチル化
+      "chlorobenzene",      // ベンゼン ➔ 塩素化
+      "nitrobenzene",       // ベンゼン ➔ ニトロ化
+      "benzenesulfonic_acid", // ベンゼン ➔ スルホン化
+      "maleic_acid",        // ベンゼン ➔ V2O5酸化開裂
+
+      // Step 2: 上記で作った物質から作れる誘導体
+      "2_propanol",         // プロピレン ➔ 水和
+      "cumene",             // ベンゼン ＋ プロピレン
+      "ethylbenzene",       // ベンゼン ＋ エチレン
+      "acetic_acid",        // アセトアルデヒド ➔ 酸化
+      "diethyl_ether",      // エタノール ➔ 130℃脱水
+      "vinyl_chloride",     // アセチレン ＋ HCl
+      "vinyl_acetate",      // アセチレン ＋ 酢酸
+      "formic_acid",        // ホルムアルデヒド ➔ 酸化
+      "dichloromethane",    // クロロメタン ➔ 塩素化
+      "ethane",             // エチレン ➔ 水素付加
+      "ethylene_oxide",     // エチレン ➔ 空気酸化
+      "maleic_anhydride",   // マレイン酸 ➔ 加熱脱水
+      "phthalic_acid",      // ナフタレン ➔ V2O5酸化 (またはo-キシレン酸化)
+      "o_xylene",           // トルエン ➔ メチル化
+      "aniline_hydrochloride", // ニトロベンゼン ➔ 還元
+
+      // Step 3: さらにその先へ
+      "acetone",            // 2-プロパノール ➔ 酸化
+      "styrene",            // エチルベンゼン ➔ 脱水素
+      "ethyl_acetate",      // 酢酸 ＋ エタノール
+      "polyvinyl_alcohol",  // 酢酸ビニル ➔ けん化
+      "chloroform",         // ジクロロメタン ➔ 塩素化
+      "ethylene_glycol",    // エチレンオキシド ➔ 水和
+      "phthalic_anhydride", // フタル酸 ➔ 加熱脱水
+      "m_xylene",           // キシレン異性体
+      "p_xylene",           // キシレン異性体
+      "tnt",                // トルエン ➔ 混酸加熱
+      "benzoic_acid",       // トルエン ➔ 酸化
+      "benzyl_alcohol",     // トルエン ➔ 側鎖塩素化加水分解
+      "aniline",            // アニリン塩酸塩 ➔ NaOH
+      "cumene_hydroperoxide", // クメン ➔ 空気酸化
+
+      // Step 4: 最終段階の重要誘導体
+      "iodoform",           // アセトン/エタノール ➔ ヨードホルム反応
+      "carbon_tetrachloride", // クロロホルム ➔ 塩素化
+      "terephthalic_acid",  // p-キシレン ➔ 酸化
+      "isophthalic_acid",   // m-キシレン ➔ 酸化
+      "benzaldehyde",       // ベンジルアルコール ➔ 酸化
+      "acetanilide",        // アニリン ➔ アセチル化
+      "benzene_diazonium_chloride", // アニリン ➔ ジアゾ化
+      "phenol",             // クメン法分解 (またはジアゾニウム分解)
+      "pet",                // テレフタル酸 ＋ エチレングリコール
+
+      // Step 5: フェノール誘導体・サリチル酸系コンプリート
+      "tribromophenol",     // フェノール ＋ 臭素水
+      "picric_acid",        // フェノール ➔ 混酸ニトロ化
+      "sodium_phenoxide",   // フェノール ＋ NaOH
+      "p_hydroxyazobenzene", // ジアゾニウム ＋ フェノキシド
+      "sodium_salicylate",  // フェノキシド ＋ 高温高圧CO2
+      "salicylic_acid",     // サリチル酸Na ＋ HCl
+      "acetylsalicylic_acid", // サリチル酸 ➔ アセチル化
+      "methyl_salicylate",  // サリチル酸 ➔ メチルエステル化
+      "cyclohexane",        // ベンゼン ➔ 水素高圧付加
+      "bhc"                 // ベンゼン ➔ 塩素光付加
+    ];
+
+    const STORAGE_KEY = "organic_chem_game_v13_strict_mission";
 
     function loadSavedData() {
       try {
@@ -1875,24 +1876,16 @@
       renderReagents();
     }
 
+    // 順序通りに確実にクリアしていけるTarget Mission更新
     function updateTargetMission() {
-      const priorityTargets = [
-        "acetaldehyde", "acetic_acid", "ethyl_acetate", "diethyl_ether",
-        "ethylene", "propylene", "2_propanol", "acetone", "iodoform",
-        "formaldehyde", "formic_acid",
-        "toluene", "maleic_acid", "maleic_anhydride",
-        "ethylbenzene", "styrene", "benzyl_alcohol", "benzaldehyde", "benzoic_acid",
-        "phthalic_acid", "phthalic_anhydride", "pet", "nitrobenzene", "aniline", "phenol"
-      ];
-
-      let nextTarget = priorityTargets.find(id => !discoveredCompounds.has(id));
+      let nextTarget = STRICT_MISSION_ORDER.find(id => !discoveredCompounds.has(id));
       if (!nextTarget) {
-        const remaining = Object.keys(COMPOUNDS).find(id => !discoveredCompounds.has(id));
-        nextTarget = remaining;
+        // 万一漏れがある場合は残りの未発見化合物から
+        nextTarget = Object.keys(COMPOUNDS).find(id => !discoveredCompounds.has(id));
       }
 
       const targetEl = document.getElementById("targetCompoundName");
-      if (nextTarget && COMPOUNDS[nextTarget]) {
+      if (nextTarget) {
         currentTargetId = nextTarget;
         targetEl.textContent = `${COMPOUNDS[nextTarget].name} を作ろう`;
       } else {
@@ -1903,7 +1896,6 @@
 
     function renderReagents() {
       const grid = document.getElementById("reagentsGrid");
-      if (!grid) return;
       grid.innerHTML = "";
 
       const filtered = REAGENTS.filter(r => r.cat === currentCategory);
@@ -1931,7 +1923,7 @@
     function switchCategory(cat, btnEl) {
       currentCategory = cat;
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      if (btnEl) btnEl.classList.add("active");
+      btnEl.classList.add("active");
       renderReagents();
     }
 
@@ -1943,12 +1935,18 @@
     }
 
     /* ========================================================
-       6. 反応処理
+       6. 反応処理（実験台全体が映るスクロール調整）
        ======================================================== */
     function scrollToBench() {
+      // 実験台の枠全体およびターゲットタスクが余裕をもって視界に入る位置までスクロール
+      const taskCard = document.getElementById("taskCardAnchor");
+      if (taskCard) {
+        const rect = taskCard.getBoundingClientRect();
+        const targetY = window.pageYOffset + rect.top - 60; // ヘッダー分余裕を持たせる
+        window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+      }
       const bench = document.getElementById("currentBenchCard");
       if (bench) {
-        bench.scrollIntoView({ behavior: "smooth", block: "start" });
         bench.classList.add("reacted");
         setTimeout(() => bench.classList.remove("reacted"), 800);
       }
@@ -1957,15 +1955,14 @@
     function applyReagent(reagentId) {
       const logContainer = document.getElementById("logContainer");
       const rInfo = REAGENTS.find(r => r.id === reagentId);
+
       const match = TRANSITIONS.find(t => t.from === currentCompoundId && t.reagent === reagentId);
 
       scrollToBench();
 
       if (match) {
         if (match.isomers) {
-          match.isomers.forEach(id => {
-            if (COMPOUNDS[id]) discoveredCompounds.add(id);
-          });
+          match.isomers.forEach(id => discoveredCompounds.add(id));
           saveData();
           logContainer.innerHTML = `
             <div class="log-line log-success">【異性体同時生成】 ${match.log}</div>
@@ -2038,7 +2035,6 @@
     }
 
     function loadStartingMaterial(id) {
-      if (!COMPOUNDS[id]) return;
       currentCompoundId = id;
       const logContainer = document.getElementById("logContainer");
       logContainer.innerHTML = `
@@ -2059,10 +2055,10 @@
     }
 
     /* ========================================================
-       7. 目標ヒントモーダル
+       7. 目標ヒントモーダル（示性式と生成方法のみ）
        ======================================================== */
     function openTaskHintModal() {
-      if (!currentTargetId || !COMPOUNDS[currentTargetId]) {
+      if (!currentTargetId) {
         alert("おめでとうございます！全化合物を完全制覇しました！");
         return;
       }
@@ -2074,14 +2070,14 @@
         <div class="info-block">
           <div class="info-block-title">📌 示性式 / 分子式</div>
           <div class="info-block-content">
-            <span style="font-family:monospace; font-size:1rem; color:var(--accent); font-weight:700;">${target.formula}</span>
+            <span style="font-family:monospace; font-size:1.05rem; color:var(--accent); font-weight:700;">${target.formula}</span>
             <span style="font-size:0.75rem; color:var(--text-sub); margin-left:8px;">(${target.group === 'aromatic' ? '芳香族' : '脂肪族'})</span>
           </div>
         </div>
 
         <div class="info-block">
           <div class="info-block-title">⚗️ 合成ルート・生成手順</div>
-          <div class="info-block-content" style="color:#38bdf8; font-weight:600;">
+          <div class="info-block-content" style="color:#38bdf8; font-weight:600; line-height:1.5;">
             ${target.recipe}
           </div>
         </div>
@@ -2099,7 +2095,6 @@
        ======================================================== */
     function openCurrentDetailModal() {
       const c = COMPOUNDS[currentCompoundId];
-      if (!c) return;
       document.getElementById("detailModalTitle").innerHTML = `🔍 実験台: <span style="color:var(--accent);">${c.name}</span> の解説`;
 
       const body = document.getElementById("detailModalBody");
@@ -2115,14 +2110,14 @@
 
         <div class="info-block">
           <div class="info-block-title">⚗️ 主な生成方法</div>
-          <div class="info-block-content" style="color:#38bdf8; font-weight:600;">
+          <div class="info-block-content" style="color:#38bdf8; font-weight:600; line-height:1.5;">
             ${c.recipe}
           </div>
         </div>
 
         <div class="info-block">
           <div class="info-block-title">🧪 性質・検出反応・入試重要ポイント</div>
-          <div class="info-block-content">
+          <div class="info-block-content" style="line-height:1.5;">
             ${c.tests}
           </div>
         </div>
@@ -2141,7 +2136,7 @@
     function setBookFilter(filter, btnEl) {
       currentBookFilter = filter;
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-      if (btnEl) btnEl.classList.add("active");
+      btnEl.classList.add("active");
       renderBookList();
     }
 
@@ -2152,7 +2147,6 @@
 
     function renderBookList() {
       const list = document.getElementById("bookList");
-      if (!list) return;
       list.innerHTML = "";
 
       let items = Object.values(COMPOUNDS);
@@ -2223,7 +2217,9 @@
       }
     }
 
-    // DOM読み込み完了時に確実に初期化
+    /* ========================================================
+       10. 初期化
+       ======================================================== */
     window.addEventListener("DOMContentLoaded", () => {
       loadSavedData();
       updateCurrentView();
